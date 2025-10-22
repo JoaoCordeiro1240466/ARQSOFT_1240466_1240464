@@ -94,55 +94,79 @@ This README has all the documentation for the P1 of ARQSOFT project.
 
 ##### Level 1
 
+![Logic View Level 1](/Documentation/Images/VL/As-Is/VL_AsIs_1.png "Logic View Level 1")
+
 ##### Level 2
+
+![Logic View Level 2](/Documentation/Images/VL/As-Is/VL_AsIs_2.png "Logic View Level 2")
 
 ##### Level 3
 
-##### Level 4
+![Logic View Level 3](/Documentation/Images/VL/As-Is/VL_AsIs_3.png "Logic View Level 3")
 
 #### Process View
 
 ##### Level 1
 
+![Process View Level 1](/Documentation/Images/VP/As-Is/VP_AsIs_1.png "Process View Level 1")
+
 ##### Level 2
+
+![Process View Level 2](/Documentation/Images/VP/As-Is/VP_AsIs_2.png "Process View Level 2")
 
 ##### Level 3
 
+![Process View Level 3](/Documentation/Images/VP/As-Is/VP_AsIs_3.png "Process View Level 3")
+
 ##### Level 4
+
+![Process View Level 4](/Documentation/Images/VP/As-Is/VP_AsIs_4.png "Process View Level 4")
 
 #### Development View
 
 ##### Level 1
 
+![Development View Level 1](/Documentation/Images/VI/As-Is/VI_AsIs_1.png "Development View Level 1")
+
 ##### Level 2
+
+![Development View Level 2](/Documentation/Images/VI/As-Is/VI_AsIs_2.png "Development View Level 2")
 
 ##### Level 3
 
+![Development View Level 3](/Documentation/Images/VI/As-Is/VI_AsIs_3.png "Development View Level 3")
+
 ##### Level 4
+
+![Development View Level 4](/Documentation/Images/VI/As-Is/VI_AsIs_4.png "Development View Level 4")
 
 #### Physical View
 
 ##### Level 1
 
+![Physical View Level 1](/Documentation/Images/VF/As-Is/VF_AsIs_1.png "Physical View Level 1")
+
 ##### Level 2
 
-##### Level 3
+![Physical View Level 2](/Documentation/Images/VF/As-Is/VF_AsIs_2.png "Physical View Level 2")
 
-##### Level 4
 
 ### System-to-be
 
 The **System-to-be** is the term used to describe the vision and design of a new system. It outlines the requirements, functionalities, and improvements that a future system will have, with the goal of replacing or enhancing the current one. Essentially, it's the plan for how things should be in the future, addressing the limitations of the present.
 
-#### Logic View
-
 ##### Level 1
+
+![Logic View Level 1](/Documentation/Images/VL/To-Be/VL_ToBe_1.png "Logic View Level 1")
 
 ##### Level 2
 
+![Logic View Level 2](/Documentation/Images/VL/To-Be/VL_ToBe_2.png "Logic View Level 2")
+
 ##### Level 3
 
-##### Level 4
+![Logic View Level 3](/Documentation/Images/VL/To-Be/VL_ToBe_3.png "Logic View Level 3")
+
 
 #### Process View
 
@@ -168,11 +192,12 @@ The **System-to-be** is the term used to describe the vision and design of a new
 
 ##### Level 1
 
+![Physical View Level 1](/Documentation/Images/VF/To-Be/VF_ToBe_1.png "Physical View Level 1")
+
 ##### Level 2
 
-##### Level 3
+![Physical View Level 2](/Documentation/Images/VF/To-Be/VF_ToBe_2.png "Physical View Level 2")
 
-##### Level 4
 
 ---
 
@@ -257,7 +282,7 @@ The selected approach (SQL + MongoDB + Redis) offers the best trade-off among co
 | :--- | :--- |
 | **Stimulus** | A user or service requests a book’s ISBN by providing its title. |
 | **Stimulus Source** | Application frontend or internal service triggering the lookup. |
-| **Environment** | The system is connected to external APIs (ISBNdb, Google Books) under normal network conditions. |
+| **Environment** | The system is connected to external APIs (Google Books, Open Library API) under normal network conditions. |
 | **Artifact** | The service responsible for querying and aggregating results from external APIs. |
 | **Response** | The system sends requests to both external APIs, retrieves the data, consolidates results, and returns the corresponding ISBN. |
 | **Response Measure** | Response time ≤ 1.5 seconds; at least one successful result from an external API; accuracy rate ≥ 95%. |
@@ -287,7 +312,7 @@ The system currently lacks integration with external book information sources. U
 
 #### Solution
 
-Use a service layer to query ISBNdb and Google Books APIs in parallel.
+Use a service layer to query Google Books and Open Library Search APIs in parallel.
 
 - **Parallel requests** : reduce latency.
 - **Fallback logic** : ensure one source compensates if the other fails.
