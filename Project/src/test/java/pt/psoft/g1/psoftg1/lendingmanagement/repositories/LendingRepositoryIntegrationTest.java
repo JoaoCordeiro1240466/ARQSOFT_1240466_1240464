@@ -18,7 +18,7 @@ import pt.psoft.g1.psoftg1.readermanagement.repositories.ReaderRepository;
 import pt.psoft.g1.psoftg1.shared.services.Page;
 import pt.psoft.g1.psoftg1.usermanagement.model.Reader;
 import pt.psoft.g1.psoftg1.usermanagement.repositories.UserRepository;
-
+import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
+@ActiveProfiles("base65")
 public class LendingRepositoryIntegrationTest {
 
     @Autowired
@@ -71,6 +72,7 @@ public class LendingRepositoryIntegrationTest {
         bookRepository.save(book);
 
         reader = Reader.newReader("manuel@gmail.com", "Manuelino123!", "Manuel Sarapinto das Coives");
+        reader.setId("reader-teste-123");
         userRepository.save(reader);
 
         readerDetails = new ReaderDetails(1,

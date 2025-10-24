@@ -55,10 +55,9 @@ public class User implements UserDetails {
 
 	// database primary key
 	@Id
-	@GeneratedValue
 	@Getter
-	@Column(name="USER_ID")
-	private Long id;
+	@Column(name = "USER_ID", length = 32, updatable = false, nullable = false)
+	private String id;
 
 	// optimistic lock concurrency control
 	@Version
@@ -126,6 +125,10 @@ public class User implements UserDetails {
 	public User(final String username, final String password) {
 		this.username = username;
 		setPassword(password);
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**

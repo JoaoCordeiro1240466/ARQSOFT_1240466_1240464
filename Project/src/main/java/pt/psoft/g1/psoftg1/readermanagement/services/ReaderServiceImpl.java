@@ -87,35 +87,32 @@ public class ReaderServiceImpl implements ReaderService {
     }
 
     @Override
-    public ReaderDetails update(final Long id, final UpdateReaderRequest request, final long desiredVersion, String photoURI){
-        final ReaderDetails readerDetails = readerRepo.findByUserId(id)
+    public ReaderDetails update(final String id, final UpdateReaderRequest request, final long desiredVersion, String photoURI) {
+        // Procura o ReaderDetails pelo username (id)
+        final ReaderDetails readerDetails = readerRepo.findByUsername(id)
                 .orElseThrow(() -> new NotFoundException("Cannot find reader"));
 
+        // Converte a lista de interesses de strings para Genre
         List<String> stringInterestList = request.getInterestList();
         List<Genre> interestList = this.getGenreListFromStringList(stringInterestList);
 
-         /*
-         * Since photos can be null (no photo uploaded) that means the URI can be null as well.
-         * To avoid the client sending false data, photoURI has to be set to any value / null
-         * according to the MultipartFile photo object
-         *
-         * That means:
-         * - photo = null && photoURI = null -> photo is removed
-         * - photo = null && photoURI = validString -> ignored
-         * - photo = validFile && photoURI = null -> ignored
-         * - photo = validFile && photoURI = validString -> photo is set
-         * */
-
+        /*
+         * Como as fotos podem ser nulas, o URI também pode ser nulo.
+         * Ajusta request.setPhoto() conforme a combinação de valores.
+         */
         MultipartFile photo = request.getPhoto();
-        if(photo == null && photoURI != null || photo != null && photoURI == null) {
+        if ((photo == null && photoURI != null) || (photo != null && photoURI == null)) {
             request.setPhoto(null);
         }
 
+        // Aplica o patch
         readerDetails.applyPatch(desiredVersion, request, photoURI, interestList);
 
+        // Salva as alterações
         userRepo.save(readerDetails.getReader());
         return readerRepo.save(readerDetails);
     }
+
 
 
     @Override
