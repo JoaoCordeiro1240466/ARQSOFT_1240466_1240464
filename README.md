@@ -283,17 +283,17 @@ The selected approach (SQL + MongoDB + Redis) offers the best trade-off among co
 
 ---
 
-## Funcionality 2 - Retrieve Book ISBN from External APIs
+## Functionality 2 - Retrieve Book ISBN from External APIs
 ### Quality Attribute Scenario
 
 | Element | Statement |
 | :--- | :--- |
-| **Stimulus** | A user or service requests a book’s ISBN by providing its title. |
+| **Stimulus** | A user or service requests a book’s ISBN by providing its title **and the preferred external API**. |
 | **Stimulus Source** | Application frontend or internal service triggering the lookup. |
 | **Environment** | The system is connected to external APIs (Google Books, Open Library API) under normal network conditions. |
-| **Artifact** | The service responsible for querying and aggregating results from external APIs. |
-| **Response** | The system sends requests to both external APIs, retrieves the data, consolidates results, and returns the corresponding ISBN. |
-| **Response Measure** | Response time ≤ 1.5 seconds; at least one successful result from an external API; accuracy rate ≥ 95%. |
+| **Artifact** | The service responsible for querying the selected external API. |
+| **Response** | The system sends a request to the **specified** external API, retrieves the data, and returns the corresponding ISBN. |
+| **Response Measure** | Response time $\leq$ 1.5 seconds (for the selected API); accuracy rate $\geq$ 95% (source-dependent). |
 
 ### Technical Memo
 
@@ -304,46 +304,47 @@ The system currently lacks integration with external book information sources. U
 #### Summary of Solution
 
 - External service integration via REST APIs
+- **User selection of the external API source**
 - API abstraction layer for source independence
-- Caching (Redis) for frequent titles
+- Caching (Redis) for frequent titles (optionally per source)
 - Timeout and retry mechanisms for reliability
-- Parallel requests for performance
 
 #### Factors
 
-- **Performance**: Fast response despite external dependencies
-- **Reliability**: Handle API downtime or slow responses
+- **Performance**: Fast response (dependent on the chosen external API)
+- **Reliability**: Handle downtime of the selected API
 - **Maintainability**: Easy to add or replace APIs
-- **Accuracy**: Consistent and correct ISBN retrieval
+- **Accuracy**: Accuracy is dependent on the data source chosen by the user
 - **Security**: Secure API key and connection handling
-
+- **Flexibility**: The user has control over the data origin
 
 #### Solution
 
-Use a service layer to query Google Books and Open Library Search APIs in parallel.
+Implement a service layer that exposes distinct endpoints or accepts a parameter allowing the user (or calling service) to **specify which external API (e.g., Google Books or Open Library Search) should be queried.**
 
-- **Parallel requests** : reduce latency.
-- **Fallback logic** : ensure one source compensates if the other fails.
-- **Caching** : avoid redundant API calls.
-- **Abstraction layer** : allows easy addition of future sources.
+- **API Selection**: The incoming request must indicate the desired source.
+- **Routing Logic**: The service routes the request to the correct adapter/client for the selected API.
+- **Caching**: Can be implemented to avoid redundant calls to the same API for the same title.
+- **Abstraction Layer**: Allows for easily adding new API sources as future options.
 
-This ensures fast, reliable ISBN retrieval regardless of external API status.
+This ensures the user receives data from the specific source they requested, giving them full control over the information's origin.
 
 #### Motivation
 
-Provide accurate and quick ISBN lookups by leveraging multiple external data providers, improving user experience and system robustness.
+To provide flexible ISBN lookups by **allowing the user to choose the data provider** they deem most reliable or appropriate, improving user control and system transparency.
 
 #### Alternatives
 
-1. Single API (only Google Books) → simpler, but unreliable if API fails.
-2. Manual database of ISBNs → static and hard to maintain.
-3. Multiple APIs with sequential calls → reliable but slower.
+1.  **Single API (no choice)** $\rightarrow$ simpler, but limiting and unreliable if the API fails.
+2.  **Manual database of ISBNs** $\rightarrow$ static and hard to maintain.
+3.  **Multiple APIs with parallel calls (Automatic Fallback)** $\rightarrow$ (The previous solution) More robust and faster for the end-user, but more complex to implement and offers no control over the source.
+4.  **Multiple APIs with sequential calls (Automatic Fallback)** $\rightarrow$ reliable, but slower than parallel.
 
 #### Pending Issues
 
-- API rate limits and quota management
-- Handling inconsistent data between APIs
-- Monitoring API response times
+- Error handling (what happens if the *chosen* API fails?)
+- API rate limits and quota management (now per selected API)
+- Monitoring the availability of each external API
 - Logging and alerting for external failures
 - Secure key rotation and storage
 
