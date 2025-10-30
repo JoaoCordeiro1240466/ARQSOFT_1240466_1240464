@@ -68,7 +68,7 @@ public class UserRepositoryIntegrationTest {
         // then
         assertThat(result).isEmpty();
     }
-/*
+
     @Test
     public void whenSave_thenUserIsPersisted() {
         // given
@@ -85,21 +85,6 @@ public class UserRepositoryIntegrationTest {
         assertThat(found.get().getName().toString()).contains("Charlie");
     }
 
-    @Test
-    public void whenDelete_thenUserIsRemoved() {
-        // given
-        User userToDelete = User.newUser("bob@example.com", "Password123!", "Bob Smith");
-        userToDelete.setId("USR-DELETE-TEST");
-        userToDelete = userRepository.save(userToDelete);
-
-        // when
-        userRepository.delete(userToDelete);
-
-        // then
-        Optional<User> result = userRepository.findById("USR-DELETE-TEST");
-        assertThat(result).isEmpty();
-    }
-*/
     @Test
     public void whenFindByNameName_thenReturnUsers() {
         // when
