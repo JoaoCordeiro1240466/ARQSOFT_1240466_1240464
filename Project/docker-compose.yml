@@ -6,10 +6,13 @@ services:
     container_name: mysql_psoft
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      # Password para o utilizador 'root'
+      MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: psoftdb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      # Cria um utilizador dedicado para a aplicação
+      MYSQL_USER: psoftuser
+      # Define a password para esse utilizador
+      MYSQL_PASSWORD: psoftpass
     ports:
       - "3306:3306"
     volumes:
