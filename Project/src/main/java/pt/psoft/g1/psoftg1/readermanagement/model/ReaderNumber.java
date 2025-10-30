@@ -2,12 +2,15 @@ package pt.psoft.g1.psoftg1.readermanagement.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Getter; // <-- ADICIONADO IMPORT
+import lombok.Setter; // <-- ADICIONADO IMPORT
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-
 @Embeddable
+@Getter // <-- ADICIONADO
+@Setter // <-- ADICIONADO
 public class ReaderNumber implements Serializable {
     @Column(name = "READER_NUMBER")
     private String readerNumber;

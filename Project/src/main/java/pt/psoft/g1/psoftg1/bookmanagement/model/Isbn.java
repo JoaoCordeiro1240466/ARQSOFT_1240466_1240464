@@ -4,12 +4,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
+import lombok.Getter; // <-- ADICIONADO IMPORT
+import lombok.Setter; // <-- ADICIONADO IMPORT
 
 import java.io.Serializable;
 
 
 @Embeddable
 @EqualsAndHashCode
+@Getter // <-- ADICIONADO (NECESSÁRIO PARA O findByIsbn_Isbn)
+@Setter // <-- ADICIONADO (NECESSÁRIO PARA O JPA)
 public class Isbn implements Serializable {
     @Size(min = 10, max = 13)
     @Column(name="ISBN", length = 16)

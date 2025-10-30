@@ -5,9 +5,13 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter; // <-- ADICIONADO IMPORT
+import lombok.Setter; // <-- ADICIONADO IMPORT
 import pt.psoft.g1.psoftg1.shared.model.StringUtilsCustom;
 
 @Embeddable
+@Getter // <-- ADICIONADO
+@Setter // <-- ADICIONADO
 public class Bio {
     @Transient
     private final int BIO_MAX_LENGTH = 4096;
@@ -24,6 +28,7 @@ public class Bio {
     protected Bio() {
     }
 
+    // O Lombok @Setter não vai sobrepor este método
     public void setBio(String bio) {
         if(bio == null)
             throw new IllegalArgumentException("Bio cannot be null");
@@ -39,4 +44,3 @@ public class Bio {
         return bio;
     }
 }
-

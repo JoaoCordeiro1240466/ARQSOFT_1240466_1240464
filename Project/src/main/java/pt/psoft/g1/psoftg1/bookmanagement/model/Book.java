@@ -1,10 +1,12 @@
 package pt.psoft.g1.psoftg1.bookmanagement.model;
 
 
-import jakarta.persistence.*;
+// Imports de persistência REMOVIDOS
+// import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import org.hibernate.StaleObjectStateException;
+// Import do Hibernate REMOVIDO
+// import org.hibernate.StaleObjectStateException;
 import pt.psoft.g1.psoftg1.authormanagement.model.Author;
 import pt.psoft.g1.psoftg1.bookmanagement.services.UpdateBookRequest;
 import pt.psoft.g1.psoftg1.exceptions.ConflictException;
@@ -15,50 +17,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Book", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_book_isbn", columnNames = {"ISBN"})
-})
+// @Entity e @Table REMOVIDOS
 public class Book extends EntityWithPhoto {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    long pk;
 
-    @Version
+    // @Id e @GeneratedValue REMOVIDOS
+    @Getter
+    private long pk;
+
+    // @Version REMOVIDO
     @Getter
     private Long version;
 
-    @Embedded
+    // @Embedded REMOVIDO
     Isbn isbn;
 
     @Getter
-    @Embedded
+    // @Embedded REMOVIDO
     @NotNull
     Title title;
 
     @Getter
-    @ManyToOne
+    // @ManyToOne REMOVIDO
     @NotNull
     Genre genre;
 
     @Getter
-    @ManyToMany
+    // @ManyToMany REMOVIDO
     private List<Author> authors = new ArrayList<>();
 
-    @Embedded
+    // @Embedded REMOVIDO
     Description description;
 
-    private void setTitle(String title) {this.title = new Title(title);}
+    public void setTitle(String title) {this.title = new Title(title);}
 
-    private void setIsbn(String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = new Isbn(isbn);
     }
 
-    private void setDescription(String description) {this.description = new Description(description); }
+    public void setDescription(String description) {this.description = new Description(description); }
 
-    private void setGenre(Genre genre) {this.genre = genre; }
+    public void setGenre(Genre genre) {this.genre = genre; }
 
-    private void setAuthors(List<Author> authors) {this.authors = authors; }
+    public void setAuthors(List<Author> authors) {this.authors = authors; }
 
     public String getDescription(){ return this.description.toString(); }
 
@@ -76,11 +76,13 @@ public class Book extends EntityWithPhoto {
             throw new IllegalArgumentException("Author list is empty");
 
         setAuthors(authors);
-        setPhotoInternal(photoURI);
+        // Atualizado para usar o método público da classe-mãe
+        setPhoto(photoURI);
     }
 
-    protected Book() {
-        // got ORM only
+    // Alterado para 'public' para o Mapper
+    public Book() {
+        // para o Mapper
     }
 
     public void removePhoto(long desiredVersion) {
@@ -88,12 +90,14 @@ public class Book extends EntityWithPhoto {
             throw new ConflictException("Provided version does not match latest version of this object");
         }
 
-        setPhotoInternal(null);
+        // Atualizado para usar o método público da classe-mãe
+        setPhoto(null);
     }
 
     public void applyPatch(final Long desiredVersion, UpdateBookRequest request) {
         if (!Objects.equals(this.version, desiredVersion))
-            throw new StaleObjectStateException("Object was already modified by another user", this.pk);
+            // Removida a exceção do Hibernate
+            throw new ConflictException("Object was already modified by another user");
 
         String title = request.getTitle();
         String description = request.getDescription();
@@ -117,11 +121,21 @@ public class Book extends EntityWithPhoto {
         }
 
         if(photoURI != null)
-            setPhotoInternal(photoURI);
-
+            // Atualizado para usar o método público da classe-mãe
+            setPhoto(photoURI);
     }
 
     public String getIsbn(){
         return this.isbn.toString();
+    }
+
+    // --- Setters para o Mapper ---
+    // Adicionados para que o Mapper consiga construir o objeto a partir da BD
+    public void setPk(long pk) {
+        this.pk = pk;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pt.psoft.g1.psoftg1.authormanagement.services.CreateAuthorRequest;
 import pt.psoft.g1.psoftg1.authormanagement.services.UpdateAuthorRequest;
+import pt.psoft.g1.psoftg1.exceptions.ConflictException;
 import pt.psoft.g1.psoftg1.shared.model.EntityWithPhoto;
 import pt.psoft.g1.psoftg1.shared.model.Photo;
 
@@ -35,7 +36,7 @@ class AuthorTest {
     void whenVersionIsStaleItIsNotPossibleToPatch() {
         final var subject = new Author(validName,validBio, null);
 
-        assertThrows(StaleObjectStateException.class, () -> subject.applyPatch(999, request));
+        assertThrows(ConflictException.class, () -> subject.applyPatch(999, request));
     }
 
     @Test

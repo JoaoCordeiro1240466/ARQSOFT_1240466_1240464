@@ -31,6 +31,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.psoft.g1.psoftg1.exceptions.ConflictException;
+import pt.psoft.g1.psoftg1.exceptions.NotFoundException;
 import pt.psoft.g1.psoftg1.shared.repositories.ForbiddenNameRepository;
 import pt.psoft.g1.psoftg1.shared.services.Page;
 import pt.psoft.g1.psoftg1.usermanagement.model.Librarian;
@@ -104,7 +105,7 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public User update(final Long id, final EditUserRequest request) {
-		final User user = userRepo.getById(id);
+		final User user = findUserById(id.toString());
 		userEditMapper.update(request, user);
 
 		return userRepo.save(user);
@@ -112,7 +113,7 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public User delete(final Long id) {
-		final User user = userRepo.getById(id);
+		final User user = findUserById(id.toString());
 
 		// user.setUsername(user.getUsername().replace("@", String.format("_%s@",
 		// user.getId().toString())));
@@ -131,7 +132,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User getUser(final Long id) {
-		return userRepo.getById(id);
+		return findUserById(id.toString());
 	}
 
 	public Optional<User> findByUsername(final String username) { return userRepo.findByUsername(username); }
@@ -161,4 +162,12 @@ public class UserService implements UserDetailsService {
 
 		return loggedUser.get();
 	}
+
+	private User findUserById(String id) {
+		// Usa o novo repositório (com String) e move a lógica de negócio para aqui
+		return userRepo.findById(id)
+				.filter(User::isEnabled)
+				.orElseThrow(() -> new NotFoundException(User.class, id));
+	}
+
 }

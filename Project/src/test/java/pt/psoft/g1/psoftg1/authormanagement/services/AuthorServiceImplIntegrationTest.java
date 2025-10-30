@@ -24,7 +24,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles("base65")
+@ActiveProfiles({"base65", "sql"})
 public class AuthorServiceImplIntegrationTest {
     @Autowired
     private AuthorService authorService;

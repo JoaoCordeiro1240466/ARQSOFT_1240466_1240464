@@ -1,8 +1,12 @@
 package pt.psoft.g1.psoftg1.readermanagement.model;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter; // <-- ADICIONA ESTE IMPORT
+import lombok.Setter; // <-- ADICIONA ESTE IMPORT
 
 @Embeddable
+@Getter // <-- ADICIONA ISTO
+@Setter // <-- ADICIONA ISTO
 public class PhoneNumber {
     String phoneNumber;
 
@@ -11,6 +15,7 @@ public class PhoneNumber {
     }
 
     protected PhoneNumber() {}
+
 
     private void setPhoneNumber(String number) {
         if(!(number.startsWith("9") || number.startsWith("2")) || number.length() != 9) {

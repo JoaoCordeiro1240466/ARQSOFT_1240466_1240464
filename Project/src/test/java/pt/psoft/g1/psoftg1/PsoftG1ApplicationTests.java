@@ -7,7 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@ActiveProfiles("base65")
+@ActiveProfiles({"base65", "sql"})
 class PsoftG1ApplicationTests {
 
 	@Test

@@ -5,9 +5,11 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter; // <-- ADICIONADO IMPORT
 import org.springframework.context.annotation.PropertySource;
 
 @Getter
+@Setter // <-- ADICIONADO
 @Embeddable
 @PropertySource({"classpath:config/library.properties"})
 public class Name {
@@ -15,10 +17,12 @@ public class Name {
     @NotBlank
     @Column(name="NAME", length = 150)
     String name;
+
     public Name(String name){
         setName(name);
     }
 
+    // O Lombok @Setter não vai sobrepor este método
     public void setName(String name){
         if(name == null)
             throw new IllegalArgumentException("Name cannot be null");
@@ -26,16 +30,9 @@ public class Name {
             throw new IllegalArgumentException("Name cannot be blank, nor only white spaces");
         if(!StringUtilsCustom.isAlphanumeric(name))
             throw new IllegalArgumentException("Name can only contain alphanumeric characters");
-
-/*
-        //  Logic moved to UserService.java, ReaderService.java
-        for(String forbidden : forbiddenNames){
-            if(name.contains(forbidden))
-                throw new IllegalArgumentException("Name contains forbidden word");
-        }
-*/
         this.name = name;
     }
+
     public String toString() {
         return this.name;
     }

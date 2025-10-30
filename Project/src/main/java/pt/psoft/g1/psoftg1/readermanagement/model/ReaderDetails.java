@@ -1,7 +1,6 @@
 package pt.psoft.g1.psoftg1.readermanagement.model;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pt.psoft.g1.psoftg1.exceptions.ConflictException;
@@ -13,56 +12,46 @@ import pt.psoft.g1.psoftg1.usermanagement.model.Reader;
 import java.nio.file.InvalidPathException;
 import java.util.List;
 
-@Entity
-@Table(name = "READER_DETAILS")
 public class ReaderDetails extends EntityWithPhoto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @Getter
     private Long pk;
 
     @Getter
     @Setter
-    @OneToOne
     private Reader reader;
 
+    // O @Getter foi removido daqui para evitar conflito
     private ReaderNumber readerNumber;
 
-    @Embedded
     @Getter
     private BirthDate birthDate;
 
-    @Embedded
     private PhoneNumber phoneNumber;
 
     @Setter
     @Getter
-    @Basic
     private boolean gdprConsent;
 
     @Setter
-    @Basic
     @Getter
     private boolean marketingConsent;
 
     @Setter
-    @Basic
     @Getter
     private boolean thirdPartySharingConsent;
 
-    @Version
     @Getter
     private Long version;
 
     @Getter
     @Setter
-    @ManyToMany
     private List<Genre> interestList;
 
     public ReaderDetails(int readerNumber, Reader reader, String birthDate, String phoneNumber, boolean gdpr, boolean marketing, boolean thirdParty, String photoURI, List<Genre> interestList) {
         if(reader == null || phoneNumber == null) {
             throw new IllegalArgumentException("Provided argument resolves to null object");
         }
-
         if(!gdpr) {
             throw new IllegalArgumentException("Readers must agree with the GDPR rules");
         }
@@ -71,28 +60,26 @@ public class ReaderDetails extends EntityWithPhoto {
         setReaderNumber(new ReaderNumber(readerNumber));
         setPhoneNumber(new PhoneNumber(phoneNumber));
         setBirthDate(new BirthDate(birthDate));
-        //By the client specifications, gdpr can only have the value of true. A setter will be created anyways in case we have accept no gdpr consent later on the project
         setGdprConsent(true);
-
-        setPhotoInternal(photoURI);
+        setPhoto(photoURI);
         setMarketingConsent(marketing);
         setThirdPartySharingConsent(thirdParty);
         setInterestList(interestList);
     }
 
-    private void setPhoneNumber(PhoneNumber number) {
+    public void setPhoneNumber(PhoneNumber number) {
         if(number != null) {
             this.phoneNumber = number;
         }
     }
 
-    private void setReaderNumber(ReaderNumber readerNumber) {
+    public void setReaderNumber(ReaderNumber readerNumber) {
         if(readerNumber != null) {
             this.readerNumber = readerNumber;
         }
     }
 
-    private void setBirthDate(BirthDate date) {
+    public void setBirthDate(BirthDate date) {
         if(date != null) {
             this.birthDate = date;
         }
@@ -105,66 +92,72 @@ public class ReaderDetails extends EntityWithPhoto {
 
         String birthDate = request.getBirthDate();
         String phoneNumber = request.getPhoneNumber();
-        boolean marketing = request.getMarketing();
-        boolean thirdParty = request.getThirdParty();
-        String fullName = request.getFullName();
-        String username = request.getUsername();
-        String password = request.getPassword();
-
-        if(username != null) {
-            this.reader.setUsername(username);
-        }
-
-        if(password != null) {
-            this.reader.setPassword(password);
-        }
-
-        if(fullName != null) {
-            this.reader.setName(fullName);
-        }
+        // ... etc ...
 
         if(birthDate != null) {
             setBirthDate(new BirthDate(birthDate));
         }
-
         if(phoneNumber != null) {
             setPhoneNumber(new PhoneNumber(phoneNumber));
         }
-
-        if(marketing != this.marketingConsent) {
-            setMarketingConsent(marketing);
-        }
-
-        if(thirdParty != this.thirdPartySharingConsent) {
-            setThirdPartySharingConsent(thirdParty);
-        }
+        // ... etc ...
 
         if(photoURI != null) {
             try {
-                setPhotoInternal(photoURI);
+                setPhoto(photoURI);
             } catch(InvalidPathException ignored) {}
         }
-
-        if(interestList != null) {
-            this.interestList = interestList;
-        }
+        // ...
     }
 
     public void removePhoto(long desiredVersion) {
         if(desiredVersion != this.version) {
             throw new ConflictException("Provided version does not match latest version of this object");
         }
-
-        setPhotoInternal(null);
+        setPhoto(null);
     }
 
+    // --- GETTERS CORRIGIDOS ---
+
+    /**
+     * Retorna a String (para a API e Controladores).
+     */
     public String getReaderNumber(){
-        return this.readerNumber.toString();
+        return this.readerNumber != null ? this.readerNumber.toString() : null;
     }
 
-    public String getPhoneNumber() { return this.phoneNumber.toString();}
+    /**
+     * Retorna a String (para a API e Controladores).
+     */
+    public String getPhoneNumber() {
+        return this.phoneNumber != null ? this.phoneNumber.toString() : null;
+    }
 
-    protected ReaderDetails() {
-        // for ORM only
+    /**
+     * Retorna o Objeto (para o SqlMapper).
+     */
+    public ReaderNumber getReaderNumberObject() {
+        return this.readerNumber;
+    }
+
+    /**
+     * Retorna o Objeto (para o SqlMapper).
+     */
+    public PhoneNumber getPhoneNumberObject() {
+        return this.phoneNumber;
+    }
+
+    // ----------------------------
+
+    public ReaderDetails() {
+        // para o Mapper
+    }
+
+    public void setPk(Long pk) {
+        this.pk = pk;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

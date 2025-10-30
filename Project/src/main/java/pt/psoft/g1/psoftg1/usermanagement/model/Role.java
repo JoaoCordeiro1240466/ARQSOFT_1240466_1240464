@@ -20,6 +20,9 @@
  */
 package pt.psoft.g1.psoftg1.usermanagement.model;
 
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +35,9 @@ import java.io.Serial;
  *
  */
 @Value
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @AllArgsConstructor
+@Embeddable
 public class Role implements GrantedAuthority {
 
 	@Serial

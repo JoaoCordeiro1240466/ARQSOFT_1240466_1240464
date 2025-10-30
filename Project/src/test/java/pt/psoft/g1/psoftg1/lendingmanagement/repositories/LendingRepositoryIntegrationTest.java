@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles("base65")
+@ActiveProfiles({"base65", "sql"})
 public class LendingRepositoryIntegrationTest {
 
     @Autowired
@@ -54,48 +54,50 @@ public class LendingRepositoryIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        author = new Author("Manuel Antonio Pina",
-                "Manuel António Pina foi um jornalista e escritor português, premiado em 2011 com o Prémio Camões",
-                null);
-        authorRepository.save(author);
+        // --- PAIS PRIMEIRO ---
 
+        // 1. Criar e GUARDAR o Genre
         genre = new Genre("Género");
-        genreRepository.save(genre);
+        genre = genreRepository.save(genre);
 
-        List<Author> authors = List.of(author);
-        book = new Book("9782826012092",
-                "O Inspetor Max",
-                "conhecido pastor-alemão que trabalha para a Judiciária, vai ser fundamental para resolver um importante caso de uma rede de malfeitores que quer colocar uma bomba num megaconcerto de uma ilustre cantora",
-                genre,
-                authors,
-                null);
-        bookRepository.save(book);
+        // 2. Criar e GUARDAR o Author
+        author = new Author("Manuel Antonio Pina", "...", null);
+        author = authorRepository.save(author);
 
+        // 3. Criar e GUARDAR o Reader (User)
         reader = Reader.newReader("manuel@gmail.com", "Manuelino123!", "Manuel Sarapinto das Coives");
         reader.setId("reader-teste-123");
-        userRepository.save(reader);
+        reader = userRepository.save(reader); // 'reader' é agora um objeto Reader (Domínio)
 
+        // --- FILHOS (que dependem dos pais) ---
+
+        // 4. Criar e GUARDAR o Book (depende de Genre e Author)
+        List<Author> authors = List.of(author);
+        book = new Book("9782826012092", "O Inspetor Max", "...", genre, authors, null);
+        book = bookRepository.save(book);
+
+        // 5. Criar e GUARDAR o ReaderDetails (depende de Reader e Genre)
+        List<Genre> interests = new java.util.ArrayList<>();
         readerDetails = new ReaderDetails(1,
-                reader,
+                reader, // 'reader' já está guardado
                 "2000-01-01",
                 "919191919",
-                true,
-                true,
-                true,
-                null,
-                null);
-        readerRepository.save(readerDetails);
+                true, true, true, null,
+                interests); // (Passa uma lista vazia, não nula)
+        // ESTA LINHA VAI FALHAR se o ReaderDetailsSqlMapper não tratar corretamente
+        // a entidade 'reader' transiente.
+        readerDetails = readerRepository.save(readerDetails); // <-- GUARDA ANTES DO LENDING
 
-        // Create and save the lending
+        // 6. Criar e GUARDAR o Lending (depende de Book e ReaderDetails)
         lending = Lending.newBootstrappingLending(book,
-                readerDetails,
+                readerDetails, // 'readerDetails' já está guardado
                 LocalDate.now().getYear(),
                 999,
                 LocalDate.of(LocalDate.now().getYear(), 1,1),
                 LocalDate.of(LocalDate.now().getYear(), 1,11),
                 15,
                 300);
-        lendingRepository.save(lending);
+        lending = lendingRepository.save(lending);
     }
 
     @AfterEach
