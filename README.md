@@ -413,3 +413,15 @@ Provide consistent, unique, and format-compliant identifiers across the system, 
 - Managing concurrency and cache invalidation
 - Monitoring ID generation rate and collisions
 - Documenting configuration changes for future entities
+
+---
+
+## Mutation Tests Reports
+
+### First moment without new tests
+
+![First moment without new tests](/Documentation/Images/MutationTestsFirstReport.png "First moment without new tests")
+
+### Before new tests
+
+![Before new tests](/Documentation/Images/ "Before new tests")
