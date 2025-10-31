@@ -72,11 +72,12 @@ public class GoogleBooksLookupService implements IsbnLookupService {
 
     // --- DTOs Internos ... ---
     @Getter @Setter @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class GoogleBooksResponse { private List<GoogleBookItem> items; }
+    static class GoogleBooksResponse { private List<GoogleBookItem> items; }
     @Getter @Setter @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class GoogleBookItem { private VolumeInfo volumeInfo; }
+    static class GoogleBookItem { private VolumeInfo volumeInfo; }
     @Getter @Setter @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class VolumeInfo { private List<IndustryIdentifier> industryIdentifiers; }
+    static class VolumeInfo { private List<IndustryIdentifier> industryIdentifiers; }
     @Getter @Setter @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class IndustryIdentifier { private String type; private String identifier; }
+    static class IndustryIdentifier { private String type; private String identifier; }
+
 }

@@ -61,13 +61,13 @@ public class OpenLibraryLookupService implements IsbnLookupService {
     // --- DTOs Internos ---
     @Getter @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class OpenLibraryResponse {
+    public static class OpenLibraryResponse {
         private List<OpenLibraryDoc> docs;
     }
 
     @Getter @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class OpenLibraryDoc {
+    public static class OpenLibraryDoc {
         private List<String> isbn;
     }
 }
