@@ -13,8 +13,8 @@ public class ExternalApiConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-                .setConnectTimeout(Duration.ofMillis(1500)) // 1.5 segundos (como no requisito)
-                .setReadTimeout(Duration.ofMillis(1500))
+                .setConnectTimeout(Duration.ofMillis(5000))
+                .setReadTimeout(Duration.ofMillis(5000))
                 .build();
     }
 
