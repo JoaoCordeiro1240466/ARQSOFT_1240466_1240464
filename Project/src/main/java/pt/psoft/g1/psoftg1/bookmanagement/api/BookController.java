@@ -7,6 +7,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import pt.psoft.g1.psoftg1.bookmanagement.services.IsbnLookupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +32,7 @@ import pt.psoft.g1.psoftg1.shared.services.SearchRequest;
 import pt.psoft.g1.psoftg1.usermanagement.model.User;
 import pt.psoft.g1.psoftg1.usermanagement.services.UserService;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Tag(name = "Books", description = "Endpoints for managing Books")
@@ -48,7 +46,7 @@ public class BookController {
     private final FileStorageService fileStorageService;
     private final UserService userService;
     private final ReaderService readerService;
-
+    private final IsbnLookupService isbnLookupService;
     private final BookViewMapper bookViewMapper;
 
     @Operation(summary = "Register a new Book")
@@ -231,6 +229,16 @@ public class BookController {
         Double avgDuration = lendingService.getAvgLendingDurationByIsbn(isbn);
 
         return ResponseEntity.ok().body(bookViewMapper.toBookAverageLendingDurationView(book, avgDuration));
+    }
+
+    @Operation(summary = "Looks up a book ISBN from an external API")
+    @GetMapping("/lookup-isbn")
+    public ResponseEntity<String> lookupIsbn(@RequestParam String title) {
+
+        Optional<String> isbn = isbnLookupService.fetchIsbnByTitle(title);
+
+        return isbn.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/search")

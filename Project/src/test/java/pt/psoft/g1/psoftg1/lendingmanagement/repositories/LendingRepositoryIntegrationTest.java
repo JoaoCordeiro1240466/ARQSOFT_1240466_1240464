@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles({"base65", "sql"})
+@ActiveProfiles({"base65", "sql","google-books"})
 public class LendingRepositoryIntegrationTest {
 
     @Autowired

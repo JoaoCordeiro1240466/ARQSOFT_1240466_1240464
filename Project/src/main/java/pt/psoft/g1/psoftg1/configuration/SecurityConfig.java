@@ -113,6 +113,7 @@ public class SecurityConfig {
                 .requestMatchers(format("%s/**", swaggerPath)).permitAll()
                 // Our public endpoints
                 .requestMatchers("/api/public/**").permitAll() // public assets & end-points
+                .requestMatchers(HttpMethod.GET, "/api/books/lookup-isbn").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/readers").permitAll() //unregistered should be able to register
                 // Our private endpoints
                 //authors

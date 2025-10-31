@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles({"base65", "sql"})
+@ActiveProfiles({"base65", "sql","google-books"})
 public class UserRepositoryIntegrationTest {
 
     @Autowired
