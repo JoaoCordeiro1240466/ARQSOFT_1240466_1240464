@@ -9,10 +9,6 @@ import java.util.Optional;
 @Repository
 public interface SpringDataJpaFineRepository extends JpaRepository<FineJpaEntity, Long> {
 
-    /**
-     * O Spring Data implementa isto.
-     * Procura Fine -> pelo seu 'lending' -> pelo 'lendingNumber' (objeto) -> pelo 'lendingNumber' (String)
-     */
     Optional<FineJpaEntity> findByLending_LendingNumber_LendingNumber(String lendingNumber);
 
 }

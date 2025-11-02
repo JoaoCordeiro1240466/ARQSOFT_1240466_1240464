@@ -8,7 +8,6 @@ import lombok.Setter;
 import pt.psoft.g1.psoftg1.bookmanagement.model.Description;
 import pt.psoft.g1.psoftg1.bookmanagement.model.Isbn;
 import pt.psoft.g1.psoftg1.bookmanagement.model.Title;
-// Importa a ENTIDADE JPA, não o modelo de domínio
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.GenreJpaEntity;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.AuthorJpaEntity;
 import pt.psoft.g1.psoftg1.shared.model.Photo;
@@ -43,18 +42,14 @@ public class BookJpaEntity {
     @NotNull
     private GenreJpaEntity genre;
 
-    /**
-     * Relação com AuthorJpaEntity.
-     * Esta é a "dona" da relação.
-     */
     @ManyToMany
 
     @JoinTable(
-            name = "T_BOOK_AUTHORS", // Nome da tabela de junção
-            joinColumns = @JoinColumn(name = "book_pk"), // Chave desta entidade
-            inverseJoinColumns = @JoinColumn(name = "author_number") // Chave da outra entidade
+            name = "T_BOOK_AUTHORS",
+            joinColumns = @JoinColumn(name = "book_pk"),
+            inverseJoinColumns = @JoinColumn(name = "author_number")
     )
-    private List<AuthorJpaEntity> authors = new ArrayList<>(); // <-- TEM DE APONTAR PARA A ENTIDADE JPA
+    private List<AuthorJpaEntity> authors = new ArrayList<>();
 
     @Embedded
     private Description description;

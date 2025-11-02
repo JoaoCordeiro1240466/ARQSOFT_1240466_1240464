@@ -20,18 +20,12 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
 
-/**
- * Esta é a Entidade de Persistência (Data Model) para o User.
- * Ela mapeia 1-para-1 com a tabela T_USER e é usada apenas
- * pela camada de infraestrutura.
- * Contém todas as anotações JPA que removemos do modelo de domínio.
- */
 @Entity
 @Table(name = "T_USER")
 @EntityListeners(AuditingEntityListener.class)
-@Getter // Lombok para getters
-@Setter // Lombok para setters
-@NoArgsConstructor// Construtor vazio para o JPA
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserJpaEntity {
 
     @Id
@@ -66,20 +60,10 @@ public class UserJpaEntity {
     @Column(nullable = false)
     private String password;
 
-    /**
-     * Assumindo que 'Name' é uma classe anotada com @Embeddable
-     */
     @Embedded
     private Name name;
 
-    /**
-     * Assumindo que 'Role' é uma classe anotada com @Embeddable
-     */
-    @ElementCollection(fetch = FetchType.EAGER) // Eager para corresponder ao original
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "T_USER_AUTHORITIES", joinColumns = @JoinColumn(name = "USER_ID"))
     private final Set<Role> authorities = new HashSet<>();
-
-    // Nota: Não precisamos de lógica de negócio aqui (ex: setPassword com encode).
-    // Isso é feito no domínio antes de o mapper converter para esta entidade.
-    // Esta classe é apenas um "contentor" de dados para o JPA.
 }

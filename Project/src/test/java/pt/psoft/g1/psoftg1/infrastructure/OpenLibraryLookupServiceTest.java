@@ -24,7 +24,7 @@ class OpenLibraryLookupServiceTest {
     private RestTemplate restTemplate;
 
     @InjectMocks
-    private OpenLibraryLookupService openLibraryLookupService; // ✅ fixed
+    private OpenLibraryLookupService openLibraryLookupService;
 
     @BeforeEach
     void setup() {

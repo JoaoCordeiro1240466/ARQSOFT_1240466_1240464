@@ -1,13 +1,11 @@
 package pt.psoft.g1.psoftg1.infrastructure.persistence.sql.mapper;
 
-import jakarta.persistence.EntityNotFoundException; // <-- ADICIONA ESTE IMPORT
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.ReaderDetailsJpaEntity;
 import pt.psoft.g1.psoftg1.readermanagement.model.ReaderDetails;
 import pt.psoft.g1.psoftg1.readermanagement.model.PhoneNumber;
-
-// 👇 ADICIONA O IMPORT PARA O REPO INTERNO DO USER
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.repo.SpringDataJpaUserRepository;
 
 import java.util.stream.Collectors;
@@ -18,14 +16,7 @@ public class ReaderDetailsSqlMapper {
 
     private final UserSqlMapper userMapper;
     private final GenreSqlMapper genreMapper;
-
-    // 👇 ADICIONA A DEPENDÊNCIA PARA O REPO INTERNO
     private final SpringDataJpaUserRepository userJpaRepo;
-
-    /**
-     * Converte a Entidade (JPA) para o Domínio.
-     * (Sem alterações aqui, já estava correto)
-     */
     public ReaderDetails toDomain(ReaderDetailsJpaEntity entity) {
         if (entity == null) return null;
 
@@ -60,9 +51,6 @@ public class ReaderDetailsSqlMapper {
         return domain;
     }
 
-    /**
-     * Converte o Domínio para a Entidade (JPA).
-     */
     public ReaderDetailsJpaEntity toEntity(ReaderDetails domain) {
         if (domain == null) return null;
 
@@ -70,33 +58,22 @@ public class ReaderDetailsSqlMapper {
         entity.setPk(domain.getPk());
         entity.setVersion(domain.getVersion());
 
-        // Mapeia os Value Objects (corrigido)
         entity.setReaderNumber(domain.getReaderNumberObject());
         entity.setBirthDate(domain.getBirthDate());
         entity.setPhoneNumber(domain.getPhoneNumberObject());
 
-        // Mapeia os booleanos
         entity.setGdprConsent(domain.isGdprConsent());
         entity.setMarketingConsent(domain.isMarketingConsent());
         entity.setThirdPartySharingConsent(domain.isThirdPartySharingConsent());
 
-        // --- MAPEAMENTO DE RELAÇÕES CORRIGIDO ---
         if (domain.getReader() != null) {
-            // O problema: domain.getReader() é um objeto de Domínio,
-            // e o userMapper.toEntity() criaria um *novo* UserJpaEntity transiente.
-            // A Solução: Temos de ir buscar a *verdadeira* entidade UserJpaEntity
-            // que já está guardada na BD.
-
-            // 1. Obtém o ID do domínio
             String userId = domain.getReader().getId();
 
-            // 2. Vai buscar a Entidade JPA gerida
-            // (Se o ID for nulo ou não for encontrado, lança uma exceção)
             pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.UserJpaEntity managedUserEntity =
                     userJpaRepo.findById(userId)
                             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId + " while mapping ReaderDetails"));
 
-            entity.setReader(managedUserEntity); // <-- Define a entidade gerida
+            entity.setReader(managedUserEntity);
         }
 
         if (domain.getInterestList() != null) {

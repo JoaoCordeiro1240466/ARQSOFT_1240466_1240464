@@ -34,29 +34,18 @@ public interface SpringDataJpaLendingRepository extends JpaRepository<LendingJpa
             "AND l.returnedDate IS NULL")
     List<LendingJpaEntity> listOutstandingByReaderNumber(@Param("readerNumber") String readerNumber);
 
-
-    /**
-     * CORRIGIDO:
-     * 1. Usa DATEDIFF(fim, inicio) (sintaxe MySQL)
-     * 2. Adiciona nativeQuery = true
-     * 3. Usa nomes de colunas da BD (ex: T_LENDING)
-     */
     @Query(value = "SELECT AVG(DATEDIFF('DAY', l.start_date, l.returned_date)) " +
             "FROM t_lending l WHERE l.returned_date IS NOT NULL",
-            nativeQuery = true) // <-- Adiciona nativeQuery
+            nativeQuery = true)
     Double getAverageDuration();
 
     @Query(value = "SELECT AVG(DATEDIFF('DAY', l.start_date, l.returned_date)) " +
             "FROM t_lending l " +
             "JOIN t_book b ON l.book_pk = b.pk " +
             "WHERE b.isbn = :isbn AND l.returned_date IS NOT NULL",
-            nativeQuery = true) // <-- Adiciona nativeQuery
+            nativeQuery = true)
     Double getAvgLendingDurationByIsbn(@Param("isbn") String isbn);
 
-    /**
-     * CORRIGIDO: Usa CURRENT_DATE (SQL standard)
-     * (Esta query não precisa de ser nativa, mas mantemos consistência)
-     */
     @Query("SELECT l FROM LendingJpaEntity l " +
             "WHERE l.returnedDate IS NULL AND l.limitDate < CURRENT_DATE")
     Page<LendingJpaEntity> getOverdue(Pageable pageable);

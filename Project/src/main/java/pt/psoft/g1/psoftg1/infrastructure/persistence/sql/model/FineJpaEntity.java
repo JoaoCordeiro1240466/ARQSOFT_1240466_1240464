@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "T_FINE") // Nome de tabela consistente
+@Table(name = "T_FINE")
 public class FineJpaEntity {
 
     @Id
@@ -26,5 +26,5 @@ public class FineJpaEntity {
 
     @OneToOne(optional = false, orphanRemoval = true)
     @JoinColumn(name = "lending_pk", nullable = false, unique = true)
-    private LendingJpaEntity lending; // <-- Aponta para a Entidade JPA
+    private LendingJpaEntity lending;
 }

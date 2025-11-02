@@ -11,7 +11,7 @@ import pt.psoft.g1.psoftg1.lendingmanagement.model.LendingNumber;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "T_LENDING", uniqueConstraints = { // Alterado para T_LENDING
+@Table(name = "T_LENDING", uniqueConstraints = {
         @UniqueConstraint(columnNames={"LENDING_NUMBER"})})
 @Getter
 @Setter
@@ -22,25 +22,16 @@ public class LendingJpaEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pk;
 
-    /**
-     * Assumindo que LendingNumber é @Embeddable
-     */
     @Embedded
     private LendingNumber lendingNumber;
 
-    /**
-     * Relação com a entidade Book
-     */
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    private BookJpaEntity book; // <-- Aponta para a Entidade JPA
+    private BookJpaEntity book;
 
-    /**
-     * Relação com a entidade ReaderDetails
-     */
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    private ReaderDetailsJpaEntity readerDetails; // <-- Aponta para a Entidade JPA
+    private ReaderDetailsJpaEntity readerDetails;
 
     @NotNull
     @Column(nullable = false, updatable = false)

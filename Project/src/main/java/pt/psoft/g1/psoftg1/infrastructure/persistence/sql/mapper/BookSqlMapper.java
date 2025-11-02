@@ -13,10 +13,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookSqlMapper {
 
-    // Mappers das entidades relacionadas
-    // O Spring vai injetá-los (assumindo que já existem)
     private final AuthorSqlMapper authorMapper;
-    private final GenreSqlMapper genreMapper; // <-- Vais precisar de criar este
+    private final GenreSqlMapper genreMapper;
 
     public Book toDomain(BookJpaEntity entity) {
         if (entity == null) return null;
@@ -28,7 +26,6 @@ public class BookSqlMapper {
         domain.setTitle(entity.getTitle().toString());
         domain.setDescription(entity.getDescription() != null ? entity.getDescription().toString() : null);
 
-        // Converter relações
         if (entity.getGenre() != null) {
             domain.setGenre(genreMapper.toDomain(entity.getGenre()));
         }
@@ -61,7 +58,6 @@ public class BookSqlMapper {
             entity.setDescription(new pt.psoft.g1.psoftg1.bookmanagement.model.Description(domain.getDescription()));
         }
 
-        // Converter relações
         if (domain.getGenre() != null) {
             entity.setGenre(genreMapper.toEntity(domain.getGenre()));
         }

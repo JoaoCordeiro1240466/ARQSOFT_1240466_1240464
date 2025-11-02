@@ -33,28 +33,23 @@ public class GoogleBooksLookupService implements IsbnLookupService {
     public Optional<String> fetchIsbnByTitle(String title) {
         System.out.println("A CHAMAR API EXTERNA (GOOGLE) PARA: " + title);
 
-        // --- CORREÇÃO AQUI ---
-        // Removido o parâmetro "projection=lite"
         URI uri = UriComponentsBuilder.fromHttpUrl(API_URL)
                 .queryParam("q", "intitle:" + title)
                 .queryParam("maxResults", 1)
-                // .queryParam("projection", "lite") // <-- REMOVIDO
                 .queryParam("key", this.apiKey)
                 .build()
                 .encode()
                 .toUri();
 
         try {
-            // Removemos o debug de "rawJsonResponse"
             GoogleBooksResponse response = restTemplate.getForObject(uri, GoogleBooksResponse.class);
 
-            // A lógica de parsing (que está correta)
             return Optional.ofNullable(response)
                     .map(GoogleBooksResponse::getItems)
                     .filter(items -> !items.isEmpty())
                     .map(items -> items.get(0))
                     .map(GoogleBookItem::getVolumeInfo)
-                    .map(VolumeInfo::getIndustryIdentifiers) // <-- Agora este campo deve existir
+                    .map(VolumeInfo::getIndustryIdentifiers)
                     .flatMap(identifiers -> identifiers.stream()
                             .filter(id -> "ISBN_13".equals(id.getType()))
                             .findFirst()
@@ -69,8 +64,6 @@ public class GoogleBooksLookupService implements IsbnLookupService {
             return Optional.empty();
         }
     }
-
-    // --- DTOs Internos ... ---
     @Getter @Setter @JsonIgnoreProperties(ignoreUnknown = true)
     static class GoogleBooksResponse { private List<GoogleBookItem> items; }
     @Getter @Setter @JsonIgnoreProperties(ignoreUnknown = true)

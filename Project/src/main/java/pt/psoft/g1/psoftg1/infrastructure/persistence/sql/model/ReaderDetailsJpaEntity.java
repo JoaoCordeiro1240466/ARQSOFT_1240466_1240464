@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-// Importa a ENTIDADE JPA, não o modelo de domínio
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.GenreJpaEntity;
 import pt.psoft.g1.psoftg1.readermanagement.model.BirthDate;
 import pt.psoft.g1.psoftg1.readermanagement.model.PhoneNumber;
@@ -24,24 +23,15 @@ public class ReaderDetailsJpaEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pk;
 
-    /**
-     * Relação com a UserJpaEntity (a entidade que representa o 'Reader')
-     */
     @OneToOne
-    private UserJpaEntity reader; // <-- Aponta para a Entidade JPA
+    private UserJpaEntity reader;
 
-    /**
-     * Assumindo que ReaderNumber é @Embeddable
-     */
     @Embedded
     private ReaderNumber readerNumber;
 
     @Embedded
-    private BirthDate birthDate; // Já é @Embeddable
+    private BirthDate birthDate;
 
-    /**
-     * Assumindo que PhoneNumber é @Embeddable
-     */
     @Embedded
     private PhoneNumber phoneNumber;
 
@@ -57,21 +47,15 @@ public class ReaderDetailsJpaEntity {
     @Version
     private Long version;
 
-    /**
-     * Relação com GenreJpaEntity
-     */
     @ManyToMany
 
     @JoinTable(
-            name = "T_READER_INTERESTS", // Define o nome da tabela de junção
-            joinColumns = @JoinColumn(name = "reader_pk"), // Chave desta entidade
-            inverseJoinColumns = @JoinColumn(name = "genre_pk") // Chave da outra entidade
+            name = "T_READER_INTERESTS",
+            joinColumns = @JoinColumn(name = "reader_pk"),
+            inverseJoinColumns = @JoinColumn(name = "genre_pk")
     )
-    private List<GenreJpaEntity> interestList; // <-- Aponta para a Entidade JPA
+    private List<GenreJpaEntity> interestList;
 
-    /**
-     * Relação com Photo (vinda da EntityWithPhoto)
-     */
     @OneToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "photo_id", nullable = true)
     private Photo photo;

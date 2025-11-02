@@ -36,12 +36,6 @@ public class AuthorJpaEntity {
     @JoinColumn(name = "photo_id", nullable = true)
     private Photo photo;
 
-
-    /**
-     * Relação inversa para Book (necessária para a query 'findCoAuthors')
-     * "mappedBy = authors" diz que a entidade BookJpaEntity (o campo 'authors')
-     * é a "dona" desta relação.
-     */
     @ManyToMany(mappedBy = "authors")
     private List<BookJpaEntity> books = new ArrayList<>();
 }

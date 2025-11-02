@@ -6,17 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Entidade de Persistência (Data Model) para o Genre.
- * Contém todas as anotações JPA que removemos do modelo de domínio.
- */
 @Entity
-@Table(name = "T_GENRE", uniqueConstraints = { // Alterado para T_GENRE
+@Table(name = "T_GENRE", uniqueConstraints = {
         @UniqueConstraint(name = "uc_genre_name", columnNames = {"genre"})
 })
 @Getter
 @Setter
-@NoArgsConstructor // Construtor vazio obrigatório para o JPA
+@NoArgsConstructor
 public class GenreJpaEntity {
 
     @Transient
@@ -30,7 +26,6 @@ public class GenreJpaEntity {
     @Column(unique = true, nullable = false, length = GENRE_MAX_LENGTH)
     private String genre;
 
-    // Construtor para o Mapper (opcional, mas útil)
     public GenreJpaEntity(String genre) {
         this.genre = genre;
     }

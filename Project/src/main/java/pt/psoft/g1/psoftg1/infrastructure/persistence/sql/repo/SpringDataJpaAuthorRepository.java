@@ -14,34 +14,18 @@ import java.util.List;
 @Repository
 public interface SpringDataJpaAuthorRepository extends JpaRepository<AuthorJpaEntity, Long> {
 
-    /**
-     * O Spring Data implementa isto automaticamente.
-     */
     List<AuthorJpaEntity> findByName_NameStartsWith(String name);
 
-    /**
-     * O mesmo que acima, mas para uma correspondência exata.
-     */
     List<AuthorJpaEntity> findByName_Name(String name);
 
-
-    // --- QUERY CORRIGIDA ---
-    // 1. Alterado o tipo de retorno para Page<Object[]> (dados brutos)
-    // 2. Corrigida a lógica do JOIN (Author -> Book -> Lending)
-    // 3. Alterado o nome do método para 'findTopAuthorByLendingsRaw'
     @Query("SELECT a, COUNT(l) " +
             "FROM AuthorJpaEntity a " +
-            "LEFT JOIN a.books b " + // Junta Author com os seus Livros
-            "LEFT JOIN LendingJpaEntity l ON l.book = b " + // Junta Livros com Lendings
+            "LEFT JOIN a.books b " +
+            "LEFT JOIN LendingJpaEntity l ON l.book = b " +
             "GROUP BY a " +
             "ORDER BY COUNT(l) DESC")
     Page<Object[]> findTopAuthorByLendingsRaw(Pageable pageableRules);
 
-    /**
-     * Implementação da query complexa para 'findCoAuthorsByAuthorNumber'.
-     * Esta query agora funciona porque AuthorJpaEntity tem a lista 'books'
-     * e BookJpaEntity tem a lista 'authors'.
-     */
     @Query("SELECT DISTINCT a2 FROM AuthorJpaEntity a1 " +
             "JOIN a1.books b " +
             "JOIN b.authors a2 " +

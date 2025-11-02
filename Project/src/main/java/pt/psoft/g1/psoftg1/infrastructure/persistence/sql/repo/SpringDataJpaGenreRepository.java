@@ -23,27 +23,15 @@ public interface SpringDataJpaGenreRepository extends JpaRepository<GenreJpaEnti
             "ORDER BY COUNT(b) DESC")
     Page<Object[]> findTop5GenreByBookCountRaw(Pageable pageable);
 
-    /**
-     * CORRIGIDO:
-     * 1. Usa DATEDIFF(fim, inicio) (sintaxe MySQL)
-     * 2. Adiciona nativeQuery = true
-     * 3. Usa nomes de colunas e tabelas da BD
-     * 4. Usa YEAR() e MONTH() (funções MySQL)
-     */
     @Query(value = "SELECT g.*, AVG(DATEDIFF(l.returned_date, l.start_date)) " +
             "FROM t_lending l " +
             "JOIN t_book b ON l.book_pk = b.pk " +
             "JOIN t_genre g ON b.genre_pk = g.pk " +
             "WHERE l.returned_date IS NOT NULL AND YEAR(l.start_date) = :year AND MONTH(l.start_date) = :month " +
-            "GROUP BY g.pk, g.genre", // Agrupa por todos os campos não agregados
+            "GROUP BY g.pk, g.genre",
             nativeQuery = true)
     List<Object[]> getAverageLendingsInMonthRaw(@Param("year") int year, @Param("month") int month, Pageable pageable);
 
-    /**
-     * CORRIGIDO:
-     * 1. Usa nativeQuery = true
-     * 2. Usa nomes de colunas e tabelas da BD
-     */
     @Query(value = "SELECT YEAR(l.start_date), MONTH(l.start_date), g.genre, COUNT(l) " +
             "FROM t_lending l " +
             "JOIN t_book b ON l.book_pk = b.pk " +
@@ -53,12 +41,6 @@ public interface SpringDataJpaGenreRepository extends JpaRepository<GenreJpaEnti
             nativeQuery = true)
     List<Object[]> getLendingsPerMonthLastYearByGenreRaw(@Param("oneYearAgo") LocalDate oneYearAgo);
 
-    /**
-     * CORRIGIDO:
-     * 1. Usa DATEDIFF(fim, inicio) (sintaxe MySQL)
-     * 2. Adiciona nativeQuery = true
-     * 3. Usa nomes de colunas e tabelas da BD
-     */
     @Query(value = "SELECT YEAR(l.start_date), MONTH(l.start_date), g.genre, AVG(DATEDIFF(l.returned_date, l.start_date)) " +
             "FROM t_lending l " +
             "JOIN t_book b ON l.book_pk = b.pk " +

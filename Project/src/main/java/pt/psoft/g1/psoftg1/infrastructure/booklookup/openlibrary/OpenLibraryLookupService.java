@@ -34,16 +34,14 @@ public class OpenLibraryLookupService implements IsbnLookupService {
         URI uri = UriComponentsBuilder.fromHttpUrl(API_URL)
                 .queryParam("title", title)
                 .queryParam("limit", 1)
-                // Pedimos explicitamente à API para incluir o campo "isbn"
                 .queryParam("fields", "key,title,isbn")
-                .build() // (sem o .encode() que removemos antes)
+                .build()
                 .toUri();
 
         try {
 
             OpenLibraryResponse response = restTemplate.getForObject(uri, OpenLibraryResponse.class);
 
-            // Extrai o ISBN
             return Optional.ofNullable(response)
                     .map(OpenLibraryResponse::getDocs)
                     .filter(docs -> !docs.isEmpty())
@@ -59,7 +57,6 @@ public class OpenLibraryLookupService implements IsbnLookupService {
         }
     }
 
-    // --- DTOs Internos ---
     @Getter @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class OpenLibraryResponse {
