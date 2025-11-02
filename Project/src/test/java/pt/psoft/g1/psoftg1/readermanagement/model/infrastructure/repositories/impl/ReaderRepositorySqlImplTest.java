@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-// Imports do seu projeto
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.mapper.ReaderDetailsSqlMapper;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.ReaderDetailsJpaEntity;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.repo.SpringDataJpaReaderRepository;
@@ -24,30 +23,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-// Imports estáticos
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes de Unidade para ReaderRepositorySqlImpl.
- * Foca-se em verificar a lógica de conversão, paginação e
- * chamadas aos colaboradores (jpaRepo, mapper).
- */
 @ExtendWith(MockitoExtension.class)
 class ReaderRepositorySqlImplTest {
 
-    // Mocks
     @Mock
     private SpringDataJpaReaderRepository jpaRepo;
 
     @Mock
     private ReaderDetailsSqlMapper mapper;
 
-    // Classe em teste
     @InjectMocks
     private ReaderRepositorySqlImpl readerRepository;
-
-    // --- Teste 1: Leitura Simples (findByReaderNumber) ---
 
     @Test
     void shouldReturnReaderWhenFoundByReaderNumber() {
@@ -68,9 +57,6 @@ class ReaderRepositorySqlImplTest {
         verify(jpaRepo).findByReaderNumber_ReaderNumber(readerNumber);
         verify(mapper).toDomain(entity);
     }
-
-    // --- Teste 2: Lógica de Conversão (findByUserId) ---
-    // Este teste é importante para verificar o Long -> String
 
     @Test
     void shouldReturnReaderWhenFoundByUserId() {
@@ -95,8 +81,6 @@ class ReaderRepositorySqlImplTest {
         verify(jpaRepo).findByReader_Id(expectedStringId);
     }
 
-    // --- Teste 3: Lógica de Data (getCountFromCurrentYear) ---
-
     @Test
     void shouldGetCountFromCurrentYear() {
         // Arrange
@@ -113,8 +97,6 @@ class ReaderRepositorySqlImplTest {
         // Verifica se o ano correto foi passado
         verify(jpaRepo).getCountInYear(currentYear);
     }
-
-    // --- Teste 4: Escrita (Save) ---
 
     @Test
     void shouldSaveAndReturnMappedReader() {
@@ -137,8 +119,6 @@ class ReaderRepositorySqlImplTest {
         verify(jpaRepo).save(entityToSave);
         verify(mapper).toDomain(savedEntity);
     }
-
-    // --- Teste 5: Lógica de Paginação (searchReaderDetails) ---
 
     @Test
     void shouldSearchReadersWithCorrectPagination() {
@@ -166,8 +146,6 @@ class ReaderRepositorySqlImplTest {
         verify(jpaRepo).findAll(any(Specification.class), eq(expectedPageable));
     }
 
-    // --- Teste 6: Método Desligado (findTopByGenre) ---
-
     @Test
     void shouldReturnEmptyPageForFindTopByGenre() {
         // Arrange
@@ -189,4 +167,4 @@ class ReaderRepositorySqlImplTest {
         verifyNoInteractions(jpaRepo);
     }
 
-} // <-- A chaveta de fecho da classe está aqui
+}

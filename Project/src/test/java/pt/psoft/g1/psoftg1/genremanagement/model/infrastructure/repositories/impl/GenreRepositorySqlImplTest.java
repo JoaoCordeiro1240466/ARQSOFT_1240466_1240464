@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-// Imports do seu projeto
 import pt.psoft.g1.psoftg1.bookmanagement.services.GenreBookCountDTO;
 import pt.psoft.g1.psoftg1.genremanagement.model.Genre;
 import pt.psoft.g1.psoftg1.genremanagement.services.GenreLendingsDTO;
@@ -23,25 +22,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-// Imports estáticos
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class GenreRepositorySqlImplTest {
 
-    // Mocks: As dependências que queremos simular
     @Mock
     private SpringDataJpaGenreRepository jpaRepo;
 
     @Mock
     private GenreSqlMapper mapper;
 
-    // A classe que estamos a testar
     @InjectMocks
     private GenreRepositorySqlImpl genreRepository;
-
-    // --- Teste 1: Leitura Simples (Caminho Feliz) ---
 
     @Test
     void shouldReturnGenreWhenFoundByString() {
@@ -63,8 +57,6 @@ class GenreRepositorySqlImplTest {
         verify(mapper).toDomain(entity);
     }
 
-    // --- Teste 2: Leitura Simples (Caminho Triste) ---
-
     @Test
     void shouldReturnEmptyWhenNotFoundByString() {
         // Arrange
@@ -79,8 +71,6 @@ class GenreRepositorySqlImplTest {
         verify(jpaRepo).findByGenre(genreName);
         verify(mapper, never()).toDomain(any());
     }
-
-    // --- Teste 3: Mapeamento de Página (findTop5GenreByBookCount) ---
 
     @Test
     void shouldCorrectlyMapTopGenreByBookCount() {
@@ -113,17 +103,12 @@ class GenreRepositorySqlImplTest {
         // Verifica o mapeamento (a sua lógica customizada)
         GenreBookCountDTO dto1 = resultPage.getContent().get(0);
         assertThat(dto1.getGenre()).isEqualTo("Ficção");
-        // --- CORRIGIDO ---
-        assertThat(dto1.getBookCount()).isEqualTo(100L); // Era getCount()
+        assertThat(dto1.getBookCount()).isEqualTo(100L);
 
         GenreBookCountDTO dto2 = resultPage.getContent().get(1);
         assertThat(dto2.getGenre()).isEqualTo("História");
-        // --- CORRIGIDO ---
-        assertThat(dto2.getBookCount()).isEqualTo(50L); // Era getCount()
+        assertThat(dto2.getBookCount()).isEqualTo(50L);
     }
-
-    // --- Teste 4: Lógica de Agrupamento (getLendingsPerMonthLastYearByGenre) ---
-    // Este é o teste mais importante
 
     @Test
     void shouldCorrectlyGroupLendingsPerMonth() {
@@ -152,11 +137,8 @@ class GenreRepositorySqlImplTest {
                 .findFirst().orElse(null);
 
         assertThat(octDto).isNotNull();
-        // --- CORRIGIDO ---
-        assertThat(octDto.getValues()).hasSize(2); // Era getStats()
-        // Assumindo que GenreLendingsDTO tem construtor (String, Long) e um bom .equals()
-        // --- CORRIGIDO ---
-        assertThat(octDto.getValues()).containsExactlyInAnyOrder( // Era getStats()
+        assertThat(octDto.getValues()).hasSize(2);
+        assertThat(octDto.getValues()).containsExactlyInAnyOrder(
                 new GenreLendingsDTO("Ficção", 50L),
                 new GenreLendingsDTO("História", 25L)
         );
@@ -167,18 +149,14 @@ class GenreRepositorySqlImplTest {
                 .findFirst().orElse(null);
 
         assertThat(sepDto).isNotNull();
-        // --- CORRIGIDO ---
-        assertThat(sepDto.getValues()).hasSize(1); // Era getStats()
-        // --- CORRIGIDO ---
-        assertThat(sepDto.getValues()).containsExactly( // Era getStats()
+        assertThat(sepDto.getValues()).hasSize(1);
+        assertThat(sepDto.getValues()).containsExactly(
                 new GenreLendingsDTO("Ficção", 30L)
         );
 
         // O mapper não é usado neste método, o que é correto
         verify(mapper, never()).toDomain(any());
     }
-
-    // --- Teste 5: Lógica de Agrupamento (getLendingsAverageDurationPerMonth) ---
 
     @Test
     void shouldCorrectlyGroupLendingsAverageDurationPerMonth() {
@@ -208,11 +186,8 @@ class GenreRepositorySqlImplTest {
                 .findFirst().orElse(null);
 
         assertThat(octDto).isNotNull();
-        // --- CORRIGIDO ---
-        assertThat(octDto.getValues()).hasSize(2); // Era getStats()
-        // Assumindo que GenreLendingsDTO tem construtor (String, Double) e um bom .equals()
-        // --- CORRIGIDO ---
-        assertThat(octDto.getValues()).containsExactlyInAnyOrder( // Era getStats()
+        assertThat(octDto.getValues()).hasSize(2);
+        assertThat(octDto.getValues()).containsExactlyInAnyOrder(
                 new GenreLendingsDTO("Ficção", 14.5),
                 new GenreLendingsDTO("História", 20.0)
         );
@@ -223,14 +198,12 @@ class GenreRepositorySqlImplTest {
                 .findFirst().orElse(null);
 
         assertThat(sepDto).isNotNull();
-        // --- CORRIGIDO ---
-        assertThat(sepDto.getValues()).hasSize(1); // Era getStats()
-        // --- CORRIGIDO ---
-        assertThat(sepDto.getValues()).containsExactly( // Era getStats()
+        assertThat(sepDto.getValues()).hasSize(1);
+        assertThat(sepDto.getValues()).containsExactly(
                 new GenreLendingsDTO("Ficção", 12.0)
         );
 
         verify(jpaRepo).getLendingsAverageDurationPerMonthRaw(startDate, endDate);
-        verify(mapper, never()).toDomain(any()); // Mapper também não é usado aqui
+        verify(mapper, never()).toDomain(any());
     }
 }

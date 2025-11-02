@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-// Imports do seu projeto
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.mapper.LendingSqlMapper;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.LendingJpaEntity;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.repo.SpringDataJpaLendingRepository;
@@ -22,31 +21,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-// Imports estáticos
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes de Unidade para LendingRepositorySqlImpl.
- * Foca-se em verificar se a lógica de mapeamento, paginação
- * e construção de queries é delegada corretamente para os
- * colaboradores (jpaRepo, mapper).
- */
 @ExtendWith(MockitoExtension.class)
 class LendingRepositorySqlImplTest {
 
-    // Mocks
     @Mock
     private SpringDataJpaLendingRepository jpaRepo;
 
     @Mock
     private LendingSqlMapper mapper;
 
-    // Classe em teste
     @InjectMocks
     private LendingRepositorySqlImpl lendingRepository;
-
-    // --- Teste 1: Leitura Simples (Caminho Feliz) ---
 
     @Test
     void shouldReturnLendingWhenFoundByNumber() {
@@ -68,8 +56,6 @@ class LendingRepositorySqlImplTest {
         verify(mapper).toDomain(entity);
     }
 
-    // --- Teste 2: Leitura Simples (Caminho Triste) ---
-
     @Test
     void shouldReturnEmptyWhenNotFoundByNumber() {
         // Arrange
@@ -83,8 +69,6 @@ class LendingRepositorySqlImplTest {
         assertThat(result).isEmpty();
         verify(mapper, never()).toDomain(any());
     }
-
-    // --- Teste 3: Lógica de Negócio (getCountFromCurrentYear) ---
 
     @Test
     void shouldGetCountFromCurrentYear() {
@@ -104,8 +88,6 @@ class LendingRepositorySqlImplTest {
         // Verifica se o jpaRepo foi chamado com o ano correto
         verify(jpaRepo).getCountInYear(currentYear);
     }
-
-    // --- Teste 4: Lógica de Paginação (getOverdue) ---
 
     @Test
     void shouldGetOverdueWithCorrectPagination() {
@@ -135,8 +117,6 @@ class LendingRepositorySqlImplTest {
         verify(jpaRepo).getOverdue(expectedPageable);
     }
 
-    // --- Teste 5: Escrita (Save) ---
-
     @Test
     void shouldSaveAndReturnMappedLending() {
         // Arrange
@@ -158,9 +138,6 @@ class LendingRepositorySqlImplTest {
         verify(jpaRepo).save(entityToSave);
         verify(mapper).toDomain(savedEntity);
     }
-
-    // --- Teste 6: Query Dinâmica (searchLendings) ---
-    // O teste mais importante aqui.
 
     @Test
     void shouldSearchLendingsWithCorrectSpecAndPagination() {

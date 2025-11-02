@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-// Imports das classes do seu projeto (ajuste os pacotes se necessário)
 import pt.psoft.g1.psoftg1.authormanagement.api.AuthorLendingView;
 import pt.psoft.g1.psoftg1.authormanagement.model.Author;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.mapper.AuthorSqlMapper;
@@ -20,35 +19,24 @@ import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.repo.SpringDataJpaAuth
 import java.util.List;
 import java.util.Optional;
 
-// Imports estáticos para Mocks e Asserts (facilitam a leitura)
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes de Unidade para AuthorRepositorySqlImpl.
- * Foco: Verificar se esta classe (o "sujeito") chama corretamente os seus
- * colaboradores (mocks) e se a lógica de mapeamento está correta.
- * Não acede à base de dados.
- */
-@ExtendWith(MockitoExtension.class) // Habilita o Mockito para gerir os mocks
+@ExtendWith(MockitoExtension.class)
 class AuthorRepositorySqlImplTest {
 
-    // A(s) dependência(s) que queremos simular (Mocks)
     @Mock
     private SpringDataJpaAuthorRepository jpaRepo;
 
     @Mock
     private AuthorSqlMapper mapper;
 
-    // A classe que queremos testar. O Mockito vai injetar os mocks acima nela.
     @InjectMocks
     private AuthorRepositorySqlImpl authorRepository;
 
-    // --- Testes para findByAuthorNumber ---
-
     @Test
     void shouldReturnAuthorWhenFoundByAuthorNumber() {
-        // Arrange (Preparar)
+        // Arrange
         Long authorNumber = 1L;
         AuthorJpaEntity foundEntity = new AuthorJpaEntity(); // Simula entidade do JPA
         Author expectedAuthor = new Author(); // Simula o objeto de domínio
@@ -60,10 +48,10 @@ class AuthorRepositorySqlImplTest {
         // 2. Quando o mapper.toDomain(foundEntity) for chamado, retorna o "expectedAuthor"
         when(mapper.toDomain(foundEntity)).thenReturn(expectedAuthor);
 
-        // Act (Executar)
+        // Act
         Optional<Author> result = authorRepository.findByAuthorNumber(authorNumber);
 
-        // Assert (Verificar)
+        // Assert
         assertThat(result).isPresent(); // Verifica se o Optional não está vazio
         assertThat(result.get()).isEqualTo(expectedAuthor); // Verifica se o conteúdo é o esperado
 
@@ -93,8 +81,6 @@ class AuthorRepositorySqlImplTest {
         verify(mapper, never()).toDomain(any(AuthorJpaEntity.class));
     }
 
-    // --- Teste para save ---
-
     @Test
     void shouldSaveAndReturnMappedAuthor() {
         // Arrange
@@ -122,8 +108,6 @@ class AuthorRepositorySqlImplTest {
         verify(jpaRepo).save(entityToSave);
         verify(mapper).toDomain(savedEntity);
     }
-
-    // --- Teste para findTopAuthorByLendings (O mais importante) ---
 
     @Test
     void shouldCorrectlyMapTopAuthorsFromRawPage() {

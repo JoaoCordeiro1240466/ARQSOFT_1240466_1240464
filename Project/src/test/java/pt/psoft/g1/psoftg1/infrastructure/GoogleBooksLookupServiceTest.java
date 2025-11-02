@@ -29,13 +29,12 @@ class GoogleBooksLookupServiceTest {
 
     @BeforeEach
     void setup() {
-        // Set a fake API key for testing
         ReflectionTestUtils.setField(googleBooksLookupService, "apiKey", "fake-api-key");
     }
 
     @Test
     void shouldReturnIsbnWhenValidResponse() {
-        // Arrange: simulate a valid API JSON response
+        // Arrange
         GoogleBooksLookupService.IndustryIdentifier isbn13 = new GoogleBooksLookupService.IndustryIdentifier();
         isbn13.setType("ISBN_13");
         isbn13.setIdentifier("9781234567890");
@@ -62,7 +61,7 @@ class GoogleBooksLookupServiceTest {
 
     @Test
     void shouldReturnEmptyWhenApiHasNoResults() {
-        // Arrange: simulate an empty response from API
+        // Arrange
         GoogleBooksLookupService.GoogleBooksResponse response = new GoogleBooksLookupService.GoogleBooksResponse();
         response.setItems(List.of()); // empty list
 
@@ -78,7 +77,7 @@ class GoogleBooksLookupServiceTest {
 
     @Test
     void shouldReturnEmptyWhenApiFails() {
-        // Arrange: simulate a connection failure
+        // Arrange
         when(restTemplate.getForObject(any(URI.class), eq(GoogleBooksLookupService.GoogleBooksResponse.class)))
                 .thenThrow(new RestClientException("Connection error"));
 
@@ -91,7 +90,7 @@ class GoogleBooksLookupServiceTest {
 
     @Test
     void shouldReturnIsbn10WhenIsbn13DoesNotExist() {
-        // Arrange: simulate API response with only ISBN_10
+        // Arrange
         GoogleBooksLookupService.IndustryIdentifier isbn10 = new GoogleBooksLookupService.IndustryIdentifier();
         isbn10.setType("ISBN_10");
         isbn10.setIdentifier("0123456789");

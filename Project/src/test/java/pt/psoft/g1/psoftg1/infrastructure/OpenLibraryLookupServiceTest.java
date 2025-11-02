@@ -28,12 +28,11 @@ class OpenLibraryLookupServiceTest {
 
     @BeforeEach
     void setup() {
-        // No specific setup required, RestTemplate is mocked
     }
 
     @Test
     void shouldReturnIsbnWhenValidResponse() {
-        // Arrange: simulate a valid API response
+        // Arrange
         OpenLibraryLookupService.OpenLibraryDoc doc = new OpenLibraryLookupService.OpenLibraryDoc();
         doc.setIsbn(List.of("9780451524935", "0451524934")); // Multiple ISBNs, should take the first one
 
@@ -53,7 +52,7 @@ class OpenLibraryLookupServiceTest {
 
     @Test
     void shouldReturnEmptyWhenApiReturnsNoResults() {
-        // Arrange: simulate response with empty docs
+        // Arrange
         OpenLibraryLookupService.OpenLibraryResponse response = new OpenLibraryLookupService.OpenLibraryResponse();
         response.setDocs(List.of()); // Empty list
 
@@ -69,7 +68,7 @@ class OpenLibraryLookupServiceTest {
 
     @Test
     void shouldReturnEmptyWhenDocsHaveNoIsbn() {
-        // Arrange: simulate doc without ISBNs
+        // Arrange
         OpenLibraryLookupService.OpenLibraryDoc doc = new OpenLibraryLookupService.OpenLibraryDoc();
         doc.setIsbn(List.of()); // Empty ISBN list
 
@@ -88,7 +87,7 @@ class OpenLibraryLookupServiceTest {
 
     @Test
     void shouldReturnEmptyWhenApiFails() {
-        // Arrange: simulate API connection failure
+        // Arrange
         when(restTemplate.getForObject(any(URI.class), eq(OpenLibraryLookupService.OpenLibraryResponse.class)))
                 .thenThrow(new RestClientException("Connection error"));
 
@@ -101,7 +100,7 @@ class OpenLibraryLookupServiceTest {
 
     @Test
     void shouldHandleNullResponseGracefully() {
-        // Arrange: simulate null API response
+        // Arrange
         when(restTemplate.getForObject(any(URI.class), eq(OpenLibraryLookupService.OpenLibraryResponse.class)))
                 .thenReturn(null);
 

@@ -7,7 +7,6 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-// Imports do seu projeto (ajuste os pacotes se necessário)
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.mapper.FineSqlMapper;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.model.FineJpaEntity;
 import pt.psoft.g1.psoftg1.infrastructure.persistence.sql.repo.SpringDataJpaFineRepository;
@@ -16,30 +15,20 @@ import pt.psoft.g1.psoftg1.lendingmanagement.model.Fine;
 import java.util.List;
 import java.util.Optional;
 
-// Imports estáticos
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes de Unidade para FineRepositorySqlImpl.
- * Foca-se em verificar se esta classe delega corretamente as chamadas
- * ao jpaRepo e ao mapper.
- */
 @ExtendWith(MockitoExtension.class)
 class FineRepositorySqlImplTest {
 
-    // Mocks: Dependências simuladas
     @Mock
     private SpringDataJpaFineRepository jpaRepo;
 
     @Mock
     private FineSqlMapper mapper;
 
-    // Sujeito em Teste: A classe real com os mocks injetados
     @InjectMocks
     private FineRepositorySqlImpl fineRepository;
-
-    // --- Teste 1: findByLendingNumber (Caminho Feliz) ---
 
     @Test
     void shouldReturnFineWhenFoundByLendingNumber() {
@@ -65,8 +54,6 @@ class FineRepositorySqlImplTest {
         verify(mapper).toDomain(foundEntity);
     }
 
-    // --- Teste 2: findByLendingNumber (Caminho Triste) ---
-
     @Test
     void shouldReturnEmptyWhenNotFoundByLendingNumber() {
         // Arrange
@@ -86,8 +73,6 @@ class FineRepositorySqlImplTest {
         verify(jpaRepo).findByLending_LendingNumber_LendingNumber(lendingNumber);
         verify(mapper, never()).toDomain(any());
     }
-
-    // --- Teste 3: save (Verifica a sequência de mapeamento) ---
 
     @Test
     void shouldSaveAndReturnMappedFine() {
@@ -111,12 +96,9 @@ class FineRepositorySqlImplTest {
         // Verifica se a sequência de chamadas foi correta
         InOrder inOrder = inOrder(mapper, jpaRepo);
         inOrder.verify(mapper).toEntity(fineToSave);    // 1º: Mapeia para entidade
-        inOrder.verify(jpaRepo).save(entityToSave);     // 2º: Salva a entidade
+        inOrder.verify(jpaRepo).save(entityToSave);     // 2º: Guarda a entidade
         inOrder.verify(mapper).toDomain(savedEntity);   // 3º: Mapeia de volta para domínio
     }
-
-    // --- Teste 4: findAll ---
-
     @Test
     void shouldFindAllAndMapResults() {
         // Arrange

@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-// Imports do seu projeto (ajuste os pacotes se necessário)
 import pt.psoft.g1.psoftg1.bookmanagement.model.Book;
 import pt.psoft.g1.psoftg1.bookmanagement.services.BookCountDTO;
 import pt.psoft.g1.psoftg1.bookmanagement.services.SearchBooksQuery;
@@ -23,40 +22,30 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-// Imports estáticos
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes de Unidade para BookRepositorySqlImpl.
- * Usa Mockito para simular as dependências (jpaRepo, mapper)
- * e foca-se em testar a lógica *dentro* desta classe.
- */
 @ExtendWith(MockitoExtension.class)
 class BookRepositorySqlImplTest {
 
-    // Mocks: Dependências simuladas
     @Mock
     private SpringDataJpaBookRepository jpaRepo;
 
     @Mock
     private BookSqlMapper mapper;
 
-    // Sujeito em Teste: A classe real com os mocks injetados
     @InjectMocks
     private BookRepositorySqlImpl bookRepository;
 
-    // --- Teste 1: Leitura Simples (Caminho Feliz) ---
 
     @Test
     void shouldReturnBookWhenFoundByIsbn() {
-        // Arrange (Preparar)
-        String isbn = "9783161484100"; // <--- Sem hífens (CORRETO)
+        // Arrange
+        String isbn = "9783161484100";
         BookJpaEntity foundEntity = new BookJpaEntity();
         Book expectedBook = new Book();
-        expectedBook.setIsbn(isbn); // <--- Agora vai passar
+        expectedBook.setIsbn(isbn);
 
-        // Configurar Mocks
         when(jpaRepo.findByIsbn_Isbn(isbn)).thenReturn(Optional.of(foundEntity));
         when(mapper.toDomain(foundEntity)).thenReturn(expectedBook);
 
@@ -67,8 +56,6 @@ class BookRepositorySqlImplTest {
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(expectedBook);
     }
-
-    // --- Teste 2: Leitura Simples (Caminho Triste) ---
 
     @Test
     void shouldReturnEmptyWhenNotFoundByIsbn() {
@@ -85,8 +72,6 @@ class BookRepositorySqlImplTest {
         // Garante que o mapper nunca foi chamado se nada foi encontrado
         verify(mapper, never()).toDomain(any());
     }
-
-    // --- Teste 3: Escrita (Save) ---
 
     @Test
     void shouldSaveAndReturnMappedBook() {
@@ -113,8 +98,6 @@ class BookRepositorySqlImplTest {
         verify(jpaRepo).save(entityToSave);
         verify(mapper).toDomain(savedEntity);
     }
-
-    // --- Teste 4: Lógica de Paginação (searchBooks) ---
 
     @Test
     void shouldSearchBooksWithCorrectPageNumber() {
@@ -146,8 +129,6 @@ class BookRepositorySqlImplTest {
         // Verifica se o JpaRepo foi chamado com os argumentos corretos
         verify(jpaRepo).findAll(any(Specification.class), eq(expectedPageable));
     }
-
-    // --- Teste 5: Lógica de Mapeamento (findTop5BooksLent) ---
 
     @Test
     void shouldCorrectlyMapTopBooksLentFromRawPage() {

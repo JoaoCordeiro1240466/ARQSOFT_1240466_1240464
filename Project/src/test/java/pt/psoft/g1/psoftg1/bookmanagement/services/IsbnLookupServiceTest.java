@@ -4,9 +4,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Basic unit test verifying interface contract assumptions.
- */
 class IsbnLookupServiceTest {
 
     private final IsbnLookupService service = title -> Optional.empty();
