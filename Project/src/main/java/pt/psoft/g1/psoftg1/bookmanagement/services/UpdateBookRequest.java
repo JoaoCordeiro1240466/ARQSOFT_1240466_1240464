@@ -1,13 +1,13 @@
 package pt.psoft.g1.psoftg1.bookmanagement.services;
 
 import jakarta.annotation.Nullable;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
-import pt.psoft.g1.psoftg1.authormanagement.model.Author;
-import pt.psoft.g1.psoftg1.genremanagement.model.Genre;
 
 import java.util.List;
-
 
 @Getter
 @Data
@@ -30,21 +30,18 @@ public class UpdateBookRequest {
     @Setter
     private MultipartFile photo;
 
+    private String genreId;
 
-    @Setter
-    private Genre genreObj;
+    private List<String> authorIds;
 
-    private String genre;
-
-    private List<Long> authors;
-
-    private List<Author> authorObjList;
-
-    public UpdateBookRequest(String isbn, String title, String genre, @NonNull List<Long> authors, String description) {
+    public UpdateBookRequest(String isbn, String title, String genreId, List<String> authorIds, String description) {
         this.isbn = isbn;
-        this.genre = genre;
+        this.genreId = genreId;
         this.title = title;
         this.description = description;
-        this.authors = authors;
+        this.authorIds = authorIds;
     }
+
+    // The fields genreObj, authorObjList, genre, and authors have been replaced
+    // by genreId and authorIds to align with the Book entity refactoring.
 }

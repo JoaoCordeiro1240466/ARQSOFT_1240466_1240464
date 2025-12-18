@@ -4,11 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
 
 @Getter
 @Data
@@ -23,7 +25,7 @@ public class CreateBookRequest {
     private String title;
 
     @NotBlank
-    private String genre;
+    private String genreId;
 
     @Nullable
     @Getter
@@ -36,5 +38,5 @@ public class CreateBookRequest {
     private String photoURI;
 
     @NotNull
-    private List<Long> authors;
+    private List<String> authorIds;
 }
