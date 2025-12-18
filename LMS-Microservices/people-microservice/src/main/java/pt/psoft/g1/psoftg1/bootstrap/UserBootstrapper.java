@@ -14,18 +14,20 @@ public class UserBootstrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Verifica se o user já existe para não dar erro de duplicado
-        if (userService.findByUsername("admin@library.pt").isEmpty()) {
+        // CORREÇÃO: Verificar se o 'admin2' existe, não o 'admin'
+        if (userService.findByUsername("admin2@library.pt").isEmpty()) {
 
-            // Cria o user com Password segura
             CreateUserRequest admin = new CreateUserRequest(
-                    "admin@library.pt",
-                    "Password123!",  // Atenção às regras da tua classe Password (Maiúscula, número, etc)
+                    "admin2@library.pt", // O email que vais usar no login
+                    "Password123!",
                     "Administrador do Sistema"
             );
 
             userService.create(admin);
-            System.out.println("✅ USER DE TESTE CRIADO: admin@library.pt / Password123!");
+            // Atualizei o log para refletir a realidade
+            System.out.println("✅ USER DE TESTE CRIADO: admin2@library.pt / Password123!");
+        } else {
+            System.out.println("ℹ️ O user admin2@library.pt já existe. Bootstrapper ignorado.");
         }
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.beans.factory.annotation.Qualifier; // <--- Importante!
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +18,8 @@ public class RabbitMQConfig {
     public static final String PEOPLE_EXCHANGE_NAME = "people-exchange";
     public static final String QUEUE_NAME = "people-validation-queue";
     public static final String ROUTING_KEY = "books.created";
+    public static final String AUTHOR_CREATE_QUEUE = "people-create-author-queue";
+    public static final String AUTHOR_CREATE_ROUTING_KEY = "author.create";
 
     @Bean
     public TopicExchange libraryEventsExchange() {
@@ -34,10 +36,19 @@ public class RabbitMQConfig {
         return new Queue(QUEUE_NAME, true);
     }
 
-    // 👇 CORREÇÃO AQUI: Adicionei o @Qualifier para desambiguar
     @Bean
-    public Binding binding(Queue queue, @Qualifier("libraryEventsExchange") TopicExchange exchange) {
+    public Queue authorCreateQueue() {
+        return new Queue(AUTHOR_CREATE_QUEUE, true);
+    }
+
+    @Bean
+    public Binding binding(@Qualifier("peopleValidationQueue") Queue queue, @Qualifier("libraryEventsExchange") TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding authorCreateBinding(@Qualifier("authorCreateQueue") Queue queue, @Qualifier("peopleExchange") TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(AUTHOR_CREATE_ROUTING_KEY);
     }
 
     @Bean

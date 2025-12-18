@@ -30,4 +30,14 @@ public class RabbitMQConfig {
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
+
+    @Bean
+    public TopicExchange peopleExchange() {
+        return new TopicExchange("people-exchange");
+    }
+
+    @Bean
+    public TopicExchange operationsExchange() {
+        return new TopicExchange("operations-exchange");
+    }
 }

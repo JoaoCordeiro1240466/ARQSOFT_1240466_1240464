@@ -80,4 +80,13 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+
+
+    public void addAuthority(String authority) {
+        if (this.authorities == null) {
+            this.authorities = new HashSet<>();
+        }
+        this.authorities.add(authority);
+    }
 }

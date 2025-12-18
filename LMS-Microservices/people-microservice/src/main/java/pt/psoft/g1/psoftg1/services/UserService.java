@@ -53,6 +53,8 @@ public class UserService implements UserDetailsService {
         user.setEnabled(true);
         // A lógica de Roles/Authorities deve ser tratada aqui se necessário
         // Ex: user.setAuthorities(request.getAuthorities().stream().map(Role::new).collect(Collectors.toSet()));
+        user.addAuthority("ROLE_USER");
+
 
         User savedUser = userRepo.save(user); // Save the user first to get the ID
 

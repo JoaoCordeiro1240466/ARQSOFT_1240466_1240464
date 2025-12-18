@@ -16,6 +16,7 @@ import pt.psoft.g1.psoftg1.services.dtos.CreateBookRequest;
 import pt.psoft.g1.psoftg1.services.dtos.UpdateBookRequest;
 import pt.psoft.g1.psoftg1.exceptions.ConflictException;
 import pt.psoft.g1.psoftg1.exceptions.NotFoundException;
+import pt.psoft.g1.psoftg1.services.dtos.CreateCompositeBookRequest;
 import pt.psoft.g1.psoftg1.api.dtos.BookView;
 import pt.psoft.g1.psoftg1.api.dtos.BookViewMapper;
 
@@ -77,6 +78,31 @@ public class BookController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (ConflictException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Register a new Book including new Author and Genre")
+    @PostMapping("/composite")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BookView> createComposite(@Valid @RequestBody CreateCompositeBookRequest resource) {
+        try {
+            // Chama o método do serviço que lida com a transação e mensagens RabbitMQ
+            Book book = bookService.createCompositeBook(resource);
+
+            // Constrói o URI para o novo recurso (aponta para /api/books/{isbn})
+            final var newBookUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/books/{isbn}")
+                    .buildAndExpand(book.getIsbn().toString())
+                    .toUri();
+
+            return ResponseEntity.created(newBookUri)
+                    .eTag(Long.toString(book.getVersion()))
+                    .body(bookViewMapper.toBookView(book));
+        } catch (ConflictException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (Exception e) {
+            // Captura erros gerais de validação ou comunicação
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not create composite book: " + e.getMessage());
         }
     }
 }

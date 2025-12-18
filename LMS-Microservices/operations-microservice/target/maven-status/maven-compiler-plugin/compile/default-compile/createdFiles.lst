@@ -19,6 +19,7 @@ pt\psoft\g1\psoftg1\lendingmanagement\model\Lending.class
 pt\psoft\g1\psoftg1\exceptions\GlobalExceptionHandler$ApiCallError.class
 pt\psoft\g1\psoftg1\exceptions\LendingForbiddenException.class
 pt\psoft\g1\psoftg1\external\service\ApiNinjasService.class
+pt\psoft\g1\psoftg1\infrastructure\messaging\GenreCommandListener.class
 pt\psoft\g1\psoftg1\shared\model\ForbiddenName.class
 pt\psoft\g1\psoftg1\genremanagement\services\GenreService.class
 pt\psoft\g1\psoftg1\auth\model\User.class
@@ -79,3 +80,4 @@ pt\psoft\g1\psoftg1\infrastructure\messaging\RabbitMQConfig.class
 pt\psoft\g1\psoftg1\shared\events\UserCreatedEvent.class
 pt\psoft\g1\psoftg1\shared\events\BookDeletedEvent.class
 pt\psoft\g1\psoftg1\shared\infrastructure\repositories\impl\SpringDataPhotoRepository.class
+pt\psoft\g1\psoftg1\infrastructure\messaging\CreateGenreCommand.class

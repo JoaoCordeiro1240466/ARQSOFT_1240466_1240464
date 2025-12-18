@@ -1,12 +1,14 @@
 package pt.psoft.g1.psoftg1.services.dtos;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class CreateBookRequest {
 
     @NotBlank

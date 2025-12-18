@@ -57,6 +57,7 @@ C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_12
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\shared\services\SearchRequest.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\shared\repositories\PhotoRepository.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\lendingmanagement\model\Lending.java
+C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\infrastructure\messaging\CreateGenreCommand.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\auth\model\User.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\lendingmanagement\api\LendingController.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\exceptions\NotFoundException.java
@@ -70,6 +71,7 @@ C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_12
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\lendingmanagement\services\SearchLendingQuery.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\shared\api\ListResponse.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\auth\model\Role.java
+C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\infrastructure\messaging\GenreCommandListener.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\lendingmanagement\infrastructure\messaging\BookReplicaListener.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\lendingmanagement\services\LendingMapper.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\operations-microservice\src\main\java\pt\psoft\g1\psoftg1\model\Reader.java

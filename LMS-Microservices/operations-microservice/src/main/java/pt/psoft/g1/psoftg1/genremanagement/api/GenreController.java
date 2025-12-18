@@ -38,7 +38,7 @@ public class GenreController {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedGenre.getPk())
+                .buildAndExpand(savedGenre.getGenreId())
                 .toUri();
 
         return ResponseEntity.created(location).body(genreViewMapper.toGenreView(savedGenre));

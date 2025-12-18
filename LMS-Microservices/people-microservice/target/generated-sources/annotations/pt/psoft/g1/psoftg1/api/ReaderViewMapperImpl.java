@@ -9,7 +9,7 @@ import pt.psoft.g1.psoftg1.model.Reader;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-04T02:33:56+0000",
+    date = "2025-12-18T20:09:58+0000",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component

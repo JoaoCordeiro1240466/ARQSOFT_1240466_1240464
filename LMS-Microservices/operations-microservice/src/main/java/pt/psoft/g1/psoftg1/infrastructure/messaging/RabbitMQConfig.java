@@ -14,6 +14,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
+    // --- Exchange ---
+    public static final String OPERATIONS_EXCHANGE_NAME = "operations-exchange";
+
+    // --- GÉNEROS (Genres) ---
+    public static final String GENRE_CREATE_QUEUE = "operations-create-genre-queue";
+    public static final String GENRE_CREATE_ROUTING_KEY = "genre.create";
+
     // --- PESSOAS (Users/Readers) ---
     public static final String PEOPLE_EXCHANGE_NAME = "people-exchange";
     public static final String USER_CREATED_QUEUE = "operations-user-created-queue";
@@ -32,6 +39,11 @@ public class RabbitMQConfig {
 
     // 1. Exchanges
     @Bean
+    public TopicExchange operationsExchange() {
+        return new TopicExchange(OPERATIONS_EXCHANGE_NAME);
+    }
+
+    @Bean
     public TopicExchange peopleExchange() {
         return new TopicExchange(PEOPLE_EXCHANGE_NAME);
     }
@@ -42,6 +54,11 @@ public class RabbitMQConfig {
     }
 
     // 2. Queues
+    @Bean
+    public Queue genreCreateQueue() {
+        return new Queue(GENRE_CREATE_QUEUE, true);
+    }
+
     @Bean
     public Queue userCreatedQueue() {
         return new Queue(USER_CREATED_QUEUE, true);
@@ -58,6 +75,11 @@ public class RabbitMQConfig {
     }
 
     // 3. Bindings
+    @Bean
+    public Binding genreCreateBinding(Queue genreCreateQueue, @Qualifier("operationsExchange") TopicExchange exchange) {
+        return BindingBuilder.bind(genreCreateQueue).to(exchange).with(GENRE_CREATE_ROUTING_KEY);
+    }
+
     @Bean
     public Binding userCreatedBinding(Queue userCreatedQueue, @Qualifier("peopleExchange") TopicExchange exchange) {
         return BindingBuilder.bind(userCreatedQueue).to(exchange).with(USER_CREATED_ROUTING_KEY);

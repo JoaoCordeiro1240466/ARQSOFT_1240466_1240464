@@ -18,9 +18,17 @@ public class Author {
     @Version
     private long version;
 
+    private String authorId;
+
     private String name;
 
     private String bio;
+
+    public Author(String authorId, String name, String bio) {
+        this.authorId = authorId;
+        this.name = name;
+        this.bio = bio;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -66,10 +74,15 @@ public class Author {
         return this.bio;
     }
 
+    public String getAuthorId() {
+        return this.authorId;
+    }
 
     public void setAuthorNumber(Long authorNumber) {
         this.authorNumber = authorNumber;
     }
+
+
 
     public void setVersion(long version) {
         this.version = version;

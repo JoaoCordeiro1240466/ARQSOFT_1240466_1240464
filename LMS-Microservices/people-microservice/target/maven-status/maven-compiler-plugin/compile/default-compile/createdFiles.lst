@@ -46,7 +46,9 @@ pt\psoft\g1\psoftg1\model\Bio.class
 pt\psoft\g1\psoftg1\api\AuthController.class
 pt\psoft\g1\psoftg1\configuration\PasswordEncoderConfig.class
 pt\psoft\g1\psoftg1\services\CreateAuthorRequest.class
+pt\psoft\g1\psoftg1\infrastructure\messaging\AuthorCommandListener.class
 pt\psoft\g1\psoftg1\repositories\AuthorRepository.class
+pt\psoft\g1\psoftg1\infrastructure\messaging\CreateAuthorCommand.class
 pt\psoft\g1\psoftg1\services\ReaderService.class
 pt\psoft\g1\psoftg1\shared\events\BookCreatedEvent.class
 pt\psoft\g1\psoftg1\api\views\UserView.class

@@ -6,31 +6,41 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity // 👈 OBRIGATÓRIO para ser uma tabela
+@Entity
 @Table(name = "Genre")
 @NoArgsConstructor
 public class Genre {
 
-    @Transient // 👈 Diz ao JPA para ignorar este campo (não cria coluna)
+    @Transient
     private final int GENRE_MAX_LENGTH = 100;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // 👈 Gera o ID automaticamente
     @Getter
-    @Setter
-    private Long pk; // Mudei para Long (objeto) que é melhor prática em JPA, mas long primitivo também dá
+    private String genreId;
 
     @Version
     @Getter
     private Long version;
 
     @Size(min = 1, max = GENRE_MAX_LENGTH, message = "Genre name must be between 1 and 100 characters")
-    @Column(nullable = false, unique = true) // 👈 Garante que o nome é guardado e único
+    @Column(nullable = false, unique = true)
     @Getter
     private String genre;
 
+    public Genre(String genreId, String genre) {
+        setGenreId(genreId);
+        setGenre(genre);
+    }
+
     public Genre(String genre) {
         setGenre(genre);
+    }
+
+    private void setGenreId(String genreId) {
+        if (genreId == null || genreId.isBlank()) {
+            throw new IllegalArgumentException("Genre ID cannot be null or blank");
+        }
+        this.genreId = genreId;
     }
 
     private void setGenre(String genre) {

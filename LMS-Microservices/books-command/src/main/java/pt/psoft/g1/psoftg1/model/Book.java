@@ -12,11 +12,16 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pt.psoft.g1.psoftg1.services.dtos.UpdateBookRequest;
 import pt.psoft.g1.psoftg1.exceptions.ConflictException;
+import pt.psoft.g1.psoftg1.shared.events.CreateGenreCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)

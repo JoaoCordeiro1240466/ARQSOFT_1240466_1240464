@@ -1,3 +1,4 @@
+C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\services\dtos\CreateCompositeBookRequest.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\shared\events\AuthorValidatedEvent.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\shared\events\BookDeletedEvent.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\configuration\SecurityConfig.java
@@ -12,6 +13,7 @@ C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_12
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\shared\services\ConcurrencyService.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\model\Isbn.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\api\dtos\BookView.java
+C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\shared\events\CreateAuthorCommand.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\exceptions\ConflictException.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\services\BookServiceImpl.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\shared\api\ListResponse.java
@@ -24,3 +26,4 @@ C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_12
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\model\Description.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\repositories\BookRepository.java
 C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\model\Book.java
+C:\Users\jocac\OneDrive\Ambiente de Trabalho\ISEP\1º SEMESTRE\ARQSOFT_1240466_1240464\LMS-Microservices\books-command\src\main\java\pt\psoft\g1\psoftg1\shared\events\CreateGenreCommand.java
