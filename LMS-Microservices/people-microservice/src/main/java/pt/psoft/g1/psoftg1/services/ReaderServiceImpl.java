@@ -1,8 +1,5 @@
 package pt.psoft.g1.psoftg1.services;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,12 +8,10 @@ import org.springframework.web.server.ResponseStatusException;
 import pt.psoft.g1.psoftg1.model.Reader;
 import pt.psoft.g1.psoftg1.repositories.ReaderRepository;
 import pt.psoft.g1.psoftg1.repositories.UserRepository;
-import pt.psoft.g1.psoftg1.services.CreateReaderRequest;
-import pt.psoft.g1.psoftg1.services.UpdateReaderRequest;
 
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -32,16 +27,21 @@ public class ReaderServiceImpl implements ReaderService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists!");
         }
 
+        String year = String.valueOf(Year.now().getValue());
+        long count = readerRepository.countByReaderNumberStartingWith(year + "/");
+        String readerNumber = year + "/" + (count + 1);
+
         Reader reader = new Reader();
         reader.setUsername(request.getUsername());
-        reader.setPassword(passwordEncoder.encode(request.getPassword()));
         reader.setFullName(request.getFullName());
-        reader.setEmail(request.getEmail());
         reader.setPhoneNumber(request.getPhoneNumber());
-        reader.setReaderNumber(generateReaderNumber());
+        reader.setEmail(request.getEmail());
+        reader.setPassword(passwordEncoder.encode(request.getPassword()));
+        reader.setReaderNumber(readerNumber);
         reader.setEnabled(true);
+        reader.addAuthority("ROLE_READER");
 
-        return userRepository.save(reader);
+        return readerRepository.save(reader);
     }
 
     @Override
@@ -86,12 +86,4 @@ public class ReaderServiceImpl implements ReaderService {
     public Iterable<Reader> findAll() {
         return readerRepository.findAll();
     }
-
-    private String generateReaderNumber() {
-        long timestamp = System.currentTimeMillis();
-        int randomNum = ThreadLocalRandom.current().nextInt(1000, 10000);
-        return "R" + timestamp + "-" + randomNum;
-    }
-
-
 }

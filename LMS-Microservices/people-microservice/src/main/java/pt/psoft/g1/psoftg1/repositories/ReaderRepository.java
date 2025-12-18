@@ -1,6 +1,7 @@
 package pt.psoft.g1.psoftg1.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pt.psoft.g1.psoftg1.model.Reader;
 
@@ -15,4 +16,7 @@ public interface ReaderRepository extends JpaRepository<Reader, Long> {
     List<Reader> findByPhoneNumber(String phoneNumber);
 
     List<Reader> findByFullNameContainingIgnoreCase(String name);
+
+    @Query("SELECT COUNT(r) FROM Reader r WHERE r.readerNumber LIKE :yearPrefix%")
+    long countByReaderNumberStartingWith(String yearPrefix);
 }

@@ -14,12 +14,12 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pt.psoft.g1.psoftg1.api.views.ReaderView;
 import pt.psoft.g1.psoftg1.model.Reader;
-import pt.psoft.g1.psoftg1.services.CreateReaderRequest;
-import pt.psoft.g1.psoftg1.services.UpdateReaderRequest;
 import pt.psoft.g1.psoftg1.model.Role;
 import pt.psoft.g1.psoftg1.model.User;
-import pt.psoft.g1.psoftg1.services.UserService;
+import pt.psoft.g1.psoftg1.services.CreateReaderRequest;
 import pt.psoft.g1.psoftg1.services.ReaderService;
+import pt.psoft.g1.psoftg1.services.UpdateReaderRequest;
+import pt.psoft.g1.psoftg1.services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +84,7 @@ public class ReaderController {
     }
 
     @Operation(summary = "Creates a reader")
+    @RolesAllowed({Role.LIBRARIAN, Role.ADMIN})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ReaderView> createReader(@Valid @RequestBody CreateReaderRequest readerRequest) {

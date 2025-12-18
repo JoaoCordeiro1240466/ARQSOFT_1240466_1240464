@@ -22,11 +22,11 @@ package pt.psoft.g1.psoftg1.model;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import lombok.AllArgsConstructor;
-import lombok.Value;
 
 import java.io.Serial;
 
@@ -34,7 +34,7 @@ import java.io.Serial;
  * Based on https://github.com/Yoh0xFF/java-spring-security-example
  *
  */
-@Value
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @AllArgsConstructor
 @Embeddable
@@ -48,4 +48,9 @@ public class Role implements GrantedAuthority {
 	public static final String READER = "READER";
 
 	String authority;
+
+	@Override
+	public String getAuthority() {
+		return this.authority;
+	}
 }
