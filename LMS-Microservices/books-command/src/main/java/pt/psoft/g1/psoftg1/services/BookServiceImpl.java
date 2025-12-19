@@ -100,7 +100,20 @@ public class BookServiceImpl implements BookService {
                 Collections.singletonList(authorId)
         );
 
-        return bookRepository.save(newBook);
+        Book savedBook = bookRepository.save(newBook);
+
+        String description = savedBook.getDescription() != null ? savedBook.getDescription().toString() : "";
+
+        BookCreatedEvent event = new BookCreatedEvent(
+                savedBook.getIsbn().toString(),
+                savedBook.getTitle().toString(),
+                description,
+                authorId,
+                savedBook.getGenreId()
+        );
+        rabbitTemplate.convertAndSend(libraryEventsExchange, "books.created", event);
+
+        return savedBook;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package pt.psoft.g1.psoftg1.lendingmanagement.api;
 
+import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -89,38 +90,37 @@ public class LendingController {
     }
 
     @Operation(summary = "Sets a lending as returned")
-    @PatchMapping(value = "/{year}/{seq}")
+    @PatchMapping(value = "/{lendingNumber}") // MUDANÇA: Recebe apenas 1 parâmetro
     public ResponseEntity<LendingView> setLendingReturned(
             final WebRequest request,
             final Authentication authentication,
-            @PathVariable("year")
-            @Parameter(description = "The year component of the Lending to find")
-            final Integer year,
-            @PathVariable("seq")
-            @Parameter(description = "The sequential component of the Lending to find")
-            final Integer seq,
+            @PathVariable("lendingNumber") // MUDANÇA: Usa o UUID
+            @Parameter(description = "The lending number (UUID)")
+            final String lendingNumber,
             @Valid @RequestBody final SetLendingReturnedRequest resource) {
+
         final String ifMatchValue = request.getHeader(ConcurrencyService.IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty() || ifMatchValue.equals("null")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "You must issue a conditional PATCH using 'if-match'");
         }
-        String ln = year + "/" + seq;
-        final var maybeLending = lendingService.findByLendingNumber(ln)
-                .orElseThrow(() -> new NotFoundException(Lending.class, ln));
 
-        // Assuming authentication.getName() is the reader's unique identifier (readerId)
-        if (!Objects.equals(authentication.getName(), maybeLending.getReaderId())) {
+        // Já não precisamos de concatenar ano + sequencia. Usamos o ID direto.
+        final var maybeLending = lendingService.findByLendingNumber(lendingNumber)
+                .orElseThrow(() -> new NotFoundException(Lending.class, lendingNumber));
+
+        if (!Objects.equals(authentication.getName(), maybeLending.getReaderCode())) {
             throw new AccessDeniedException("Reader does not have permission to edit this lending");
         }
 
-        final var lending = lendingService.setReturned(ln, resource, concurrencyService.getVersionFromIfMatchHeader(ifMatchValue));
+        final var lending = lendingService.setReturned(lendingNumber, resource, concurrencyService.getVersionFromIfMatchHeader(ifMatchValue));
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/hal+json"))
                 .eTag(Long.toString(lending.getVersion()))
                 .body(lendingViewMapper.toLendingView(lending));
     }
+
 
     @Operation(summary = "Get list of overdue lendings")
     @GetMapping(value = "/overdue")
@@ -138,5 +138,11 @@ public class LendingController {
         final org.springframework.data.domain.Page<Lending> readerListPage = lendingService.searchLendings(request.getPage(), request.getQuery());
         final List<Lending> readerList = readerListPage.getContent();
         return new ListResponse<>(lendingViewMapper.toLendingView(readerList));
+    }
+
+    @GetMapping
+    public List<LendingView> findAll() {
+        final Iterable<Lending> lendings = this.lendingService.findAll();
+        return lendingViewMapper.toLendingView(Lists.newArrayList(lendings));
     }
 }

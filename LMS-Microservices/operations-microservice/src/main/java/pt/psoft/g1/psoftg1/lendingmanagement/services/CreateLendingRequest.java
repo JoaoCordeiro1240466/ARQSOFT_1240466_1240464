@@ -20,6 +20,6 @@ public class CreateLendingRequest {
 
     @NotNull
     @NotBlank
-    @Size(min = 6, max = 16)
+    @Size(min = 6, max = 50)
     private String readerNumber;
 }

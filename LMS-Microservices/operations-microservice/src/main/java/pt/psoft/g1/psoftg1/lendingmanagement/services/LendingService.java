@@ -22,4 +22,5 @@ public interface LendingService {
     Lending setReturned(String id, SetLendingReturnedRequest resource, long desiredVersion);
     org.springframework.data.domain.Page<Lending> getOverdue(Page page); // Using custom Page
     org.springframework.data.domain.Page<Lending> searchLendings(Page page, SearchLendingQuery request); // Using custom Page
+    Iterable<Lending> findAll();
 }

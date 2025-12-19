@@ -70,7 +70,7 @@ public class LendingServiceImpl implements LendingService{
         var lending = lendingRepository.findByLendingNumber(lendingNumber)
                 .orElseThrow(() -> new NotFoundException("Cannot update lending with this lending number"));
 
-        lending.setReturned(desiredVersion, resource.getCommentary());
+        lending.setReturned(desiredVersion, resource.getCommentary(), resource.getGrade());
 
         if(lending.getDaysDelayed() > 0){
             final var fine = new Fine(lending);
@@ -100,5 +100,10 @@ public class LendingServiceImpl implements LendingService{
         String readerId = (query != null) ? query.getReaderNumber() : null; // Assuming readerNumber in query maps to readerId in repo
 
         return lendingRepository.searchLendings(isbn, readerId, pageable);
+    }
+
+    @Override
+    public Iterable<Lending> findAll() {
+        return lendingRepository.findAll();
     }
 }

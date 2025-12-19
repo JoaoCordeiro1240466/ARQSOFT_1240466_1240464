@@ -1,6 +1,8 @@
 package pt.psoft.g1.psoftg1.lendingmanagement.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -55,6 +57,10 @@ public class Lending {
     @Column(length = 1024)
     private String commentary = null;
 
+    @Min(0)
+    @Max(10)
+    private Integer grade;
+
     // 👇 Estes campos são calculados, não devem ser colunas na BD
     @Transient
     private Integer daysUntilReturn;
@@ -80,7 +86,7 @@ public class Lending {
         this.fineValuePerDayInCents = fineValuePerDayInCents;
     }
 
-    public void setReturned(final long desiredVersion, final String commentary){
+    public void setReturned(final long desiredVersion, final String commentary, final Integer grade){
         if (this.returnedDate != null)
             throw new IllegalArgumentException("book has already been returned!");
 
@@ -91,6 +97,13 @@ public class Lending {
 
         if(commentary != null)
             this.commentary = commentary;
+
+        if (grade != null) {
+            if (grade < 0 || grade > 10) {
+                throw new IllegalArgumentException("Grade must be between 0 and 10.");
+            }
+            this.grade = grade;
+        }
 
         this.returnedDate = LocalDate.now();
     }

@@ -13,4 +13,8 @@ public class BookReplica {
 
     @Id
     private String isbn;
+    private String title;
+    private String authorId;
+    private String genre;
+    private int publicationYear;
 }

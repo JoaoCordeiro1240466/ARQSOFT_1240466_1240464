@@ -8,7 +8,7 @@ import pt.psoft.g1.psoftg1.lendingmanagement.model.Lending;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-18T19:45:21+0000",
+    date = "2025-12-19T00:30:44+0000",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
@@ -22,8 +22,9 @@ public class LendingViewMapperImpl extends LendingViewMapper {
 
         LendingView lendingView = new LendingView();
 
+        lendingView.setCode( lending.getLendingNumber() );
         lendingView.setBookIsbn( lending.getIsbn() );
-        lendingView.setReaderCode( lending.getReaderId() );
+        lendingView.setReaderCode( lending.getReaderCode() );
         lendingView.setFineValuePerDayInCents( (double) lending.getFineValuePerDayInCents() );
         lendingView.setLendingNumber( lending.getLendingNumber() );
         lendingView.setStartDate( lending.getStartDate() );

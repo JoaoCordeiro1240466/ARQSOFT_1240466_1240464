@@ -16,7 +16,13 @@ public class BookReplicaListener {
 
     @RabbitListener(queues = "lending-book-created-queue")
     public void handleBookCreated(BookCreatedEvent event) {
-        BookReplica bookReplica = new BookReplica(event.getIsbn());
+        BookReplica bookReplica = new BookReplica(
+                event.getIsbn(),
+                event.getTitle(),
+                event.getAuthorId(),
+                event.getGenre(),
+                event.getPublicationYear()
+        );
         bookReplicaRepository.save(bookReplica);
     }
 

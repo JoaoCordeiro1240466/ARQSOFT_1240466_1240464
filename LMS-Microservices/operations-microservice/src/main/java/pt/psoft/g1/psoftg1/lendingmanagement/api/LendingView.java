@@ -17,4 +17,5 @@ public class LendingView {
     private LocalDate returnedDate;
     private Double fineValuePerDayInCents;
     private String commentary;
+    private String code;
 }
