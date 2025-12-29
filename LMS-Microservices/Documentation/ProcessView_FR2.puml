@@ -1,0 +1,64 @@
+@startuml Process View - Create Reader and User in Same Request
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Process View - Functionality 2: Create Reader and User in Same Request
+
+actor "Librarian" as Librarian
+participant "People-Microservice" as PeopleAPI
+participant "ReaderService" as ReaderService
+database "People DB" as PeopleDB
+queue "RabbitMQ" as RabbitMQ
+participant "UserEventsListener" as OperationsListener
+database "Operations DB" as OperationsDB
+
+Librarian -> PeopleAPI: POST /api/readers\n{username, password, fullName,\nphoneNumber, email, ...}
+activate PeopleAPI
+
+PeopleAPI -> ReaderService: create(CreateReaderRequest)
+activate ReaderService
+
+ReaderService -> ReaderService: Validate username uniqueness
+ReaderService -> ReaderService: Generate reader number\n(year/sequence)
+ReaderService -> ReaderService: Create Reader entity\n(extends User)
+ReaderService -> ReaderService: Set ROLE_READER authority
+ReaderService -> ReaderService: Encode password
+
+ReaderService -> PeopleDB: Save Reader entity\n(Transaction)
+activate PeopleDB
+PeopleDB --> ReaderService: Reader saved (with ID)
+deactivate PeopleDB
+
+ReaderService -> RabbitMQ: Publish UserCreatedEvent\n{id, username, fullName}\nRouting: "user.created"
+activate RabbitMQ
+RabbitMQ --> ReaderService: Event published
+deactivate RabbitMQ
+
+ReaderService --> PeopleAPI: Return Reader entity
+deactivate ReaderService
+
+PeopleAPI --> Librarian: HTTP 201 Created\nReaderView with readerNumber
+deactivate PeopleAPI
+
+RabbitMQ -> OperationsListener: Consume UserCreatedEvent\nfrom "operations-user-created-queue"
+activate OperationsListener
+
+OperationsListener -> OperationsDB: Check if Reader exists\nby databaseId
+activate OperationsDB
+OperationsDB --> OperationsListener: Reader not found
+deactivate OperationsDB
+
+OperationsListener -> OperationsListener: Create Reader replica\n{databaseId, username,\nfullName, role="READER"}
+
+OperationsListener -> OperationsDB: Save Reader replica\n(Transaction)
+activate OperationsDB
+OperationsDB --> OperationsListener: Reader replica saved
+deactivate OperationsDB
+
+OperationsListener -> RabbitMQ: Event processed
+deactivate OperationsListener
+deactivate RabbitMQ
+
+@enduml

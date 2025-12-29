@@ -1,0 +1,78 @@
+@startuml
+!theme plain
+skinparam sequenceMessageAlign center
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+
+title Process: Create Book, Author and Genre in Same Process\n(As a Librarian)
+
+actor Librarian
+participant "books-command\n(BookController)" as BooksCommand
+participant "BookServiceImpl" as BookService
+database "Book Database" as BookDB
+queue "RabbitMQ\nMessage Broker" as RabbitMQ
+participant "people-microservice\n(AuthorCommandListener)" as PeopleMS
+database "Author Database" as PeopleDB
+participant "operations-microservice\n(GenreCommandListener)" as OperationsMS
+database "Genre Database" as OperationsDB
+participant "books-query\n(BookEventHandler)" as BooksQuery
+participant "operations-microservice\n(BookReplicaListener)" as OperationsListener
+
+Librarian -> BooksCommand: POST /api/books/composite\n{isbn, title, description,\nauthor: {name, bio}, genre}
+activate BooksCommand
+
+BooksCommand -> BookService: createCompositeBook(request)
+activate BookService
+
+note right of BookService
+  Generate UUIDs:
+  - authorId (UUID)
+  - genreId (UUID)
+end note
+
+BookService -> BookService: Generate authorId
+BookService -> BookService: Generate genreId
+
+BookService -> BookDB: Save Book\n(isbn, title, description,\ngenreId, [authorId])
+activate BookDB
+BookDB --> BookService: Book saved
+deactivate BookDB
+
+BookService -> RabbitMQ: BookCreatedEvent\nExchange: library-events-exchange\nRouting: "books.created"\n{isbn, title, description,\nauthorId, genreId}
+
+BookService --> BooksCommand: Return saved Book
+deactivate BookService
+BooksCommand --> Librarian: HTTP 201 Created\n{BookView}
+deactivate BooksCommand
+
+RabbitMQ -> PeopleMS: CreateAuthorCommand\nQueue: people-create-author-queue
+activate PeopleMS
+PeopleMS -> PeopleDB: Save Author\n(authorId, name, bio)
+activate PeopleDB
+PeopleDB --> PeopleMS: Author saved
+deactivate PeopleDB
+deactivate PeopleMS
+
+RabbitMQ -> OperationsMS: CreateGenreCommand\nQueue: operations-create-genre-queue
+activate OperationsMS
+OperationsMS -> OperationsDB: Save Genre\n(genreId, name)
+activate OperationsDB
+OperationsDB --> OperationsMS: Genre saved
+deactivate OperationsDB
+deactivate OperationsMS
+
+RabbitMQ -> BooksQuery: BookCreatedEvent\nQueue: books-query-book-created-queue
+activate BooksQuery
+BooksQuery -> BooksQuery: Update Read Model
+deactivate BooksQuery
+
+RabbitMQ -> OperationsListener: BookCreatedEvent\nQueue: lending-book-created-queue
+activate OperationsListener
+OperationsListener -> OperationsDB: Create BookReplica\n(isbn, title, authorId, genreId)
+activate OperationsDB
+OperationsDB --> OperationsListener: BookReplica saved
+deactivate OperationsDB
+deactivate OperationsListener
+
+deactivate RabbitMQ
+@enduml

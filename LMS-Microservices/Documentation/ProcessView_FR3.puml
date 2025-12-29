@@ -1,0 +1,77 @@
+@startuml Process View - Return Book with Comment and Grade
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+skinparam sequenceMessageAlign center
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+
+title Process View - Functionality 3: Return Book with Comment and Grade\n(As a Reader)
+
+actor "Reader" as Reader
+participant "Operations-Microservice" as OperationsAPI
+participant "LendingService" as LendingService
+participant "Lending Entity" as Lending
+participant "Fine Entity" as Fine
+database "Operations DB" as OperationsDB
+
+Reader -> OperationsAPI: PATCH /api/lendings/{lendingNumber}\nHeaders: Authorization (JWT), If-Match (version)\nBody: {commentary, grade}
+activate OperationsAPI
+
+OperationsAPI -> OperationsAPI: Validate If-Match header\n(optimistic locking)
+OperationsAPI -> OperationsAPI: Extract version from If-Match header
+
+OperationsAPI -> LendingService: findByLendingNumber(lendingNumber)
+activate LendingService
+LendingService -> OperationsDB: Find Lending by lendingNumber
+activate OperationsDB
+OperationsDB --> LendingService: Lending entity
+deactivate OperationsDB
+LendingService --> OperationsAPI: Lending entity
+deactivate LendingService
+
+OperationsAPI -> OperationsAPI: Check authorization\n(authentication.getName() == lending.getReaderCode())
+
+OperationsAPI -> LendingService: setReturned(\nlendingNumber, request, version)
+activate LendingService
+
+LendingService -> OperationsDB: Find Lending by lendingNumber
+activate OperationsDB
+OperationsDB --> LendingService: Lending entity
+deactivate OperationsDB
+
+LendingService -> Lending: setReturned(version, commentary, grade)
+activate Lending
+
+Lending -> Lending: Validate version\n(optimistic locking)
+Lending -> Lending: Check if already returned
+Lending -> Lending: Validate commentary length\n(max 1024 characters)
+Lending -> Lending: Validate grade range\n(0-10)
+
+Lending -> Lending: Set commentary (if provided)
+Lending -> Lending: Set grade (if provided)
+Lending -> Lending: Set returnedDate = LocalDate.now()
+Lending --> LendingService: Lending updated
+deactivate Lending
+
+LendingService -> Lending: getDaysDelayed()
+activate Lending
+Lending -> Lending: Calculate days between\nlimitDate and returnedDate
+Lending --> LendingService: daysDelayed
+deactivate Lending
+
+LendingService -> OperationsDB: Save Lending\n(commentary, grade, returnedDate, version++)\n(Transaction)
+activate OperationsDB
+OperationsDB --> LendingService: Lending saved
+deactivate OperationsDB
+
+LendingService --> OperationsAPI: Updated Lending entity
+deactivate LendingService
+
+OperationsAPI -> OperationsAPI: Build response with ETag\n(updated version number)
+OperationsAPI --> Reader: HTTP 200 OK\nETag: {newVersion}\nBody: LendingView\n{commentary, grade, returnedDate, ...}
+deactivate OperationsAPI
+
+@enduml
+

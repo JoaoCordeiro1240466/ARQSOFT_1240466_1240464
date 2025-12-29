@@ -43,9 +43,15 @@ The **System-to-be** is the term used to describe the vision and design of a new
 
 ##### Functionality 1: As a librarian, I want to create a Book, Author and Genre in the same process.
 
-##### Functionality 2: As a librarian, I want to create a Reader and the respec<ve User in the same request.
+![Process View FR 1](./Documentation/Images/ProcessView/ProcessView_FR1.png "Process View FR 1")
+
+##### Functionality 2: As a librarian, I want to create a Reader and the respective User in the same request.
+
+![Process View FR 2](./Documentation/Images/ProcessView/ProcessView_FR2.png "Process View FR 2")
 
 ##### Functionality 3: As a reader, upon returning a Book, I want to leave a text comment about the Book and grading it (0-10).
+
+![Process View FR 3](./Documentation/Images/ProcessView/ProcessView_FR3.png "Process View FR 3")
 
 #### Development View
 
