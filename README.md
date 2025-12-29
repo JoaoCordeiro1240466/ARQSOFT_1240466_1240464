@@ -1,6 +1,6 @@
 # ARQSOFT_1240466_1240464
 
-This README has all the documentation for the P1 of ARQSOFT project.
+This README has all the documentation for the P1 of ARQSOFT project. To see the documentation for the P2 of ARQSOFT project, please check the [README](./LMS-Microservices/README.md) file in the Microservices folder.
 
 **Group**:
 - Ivo Moutinho : 1240464
