@@ -24,6 +24,11 @@ This README has all the documentation for the P2 of ARQSOFT project.
     - [Physical View](#physical-view)
       - [Level 1](#level-1-3)
       - [Level 2](#level-2-3)
+- [Alignment with business requirements](#alignment-with-business-requirements)
+  - [Functionality 1: As a librarian, I want to create a Book, Author and Genre in the same process.](#functionality-1-as-a-librarian-i-want-to-create-a-book-author-and-genre-in-the-same-process)
+  - [Functionality 2: As a librarian, I want to create a Reader and the respective User in the same request.](#functionality-2-as-a-librarian-i-want-to-create-a-reader-and-the-respective-user-in-the-same-request)
+  - [Functionality 3: As a reader, upon returning a Book, I want to leave a text comment about the Book and grading it (0-10).](#functionality-3-as-a-reader-upon-returning-a-book-i-want-to-leave-a-text-comment-about-the-book-and-grading-it-0-10)
+- [Adoption of microservices patterns](#adoption-of-microservices-patterns)
 
 ## UML Diagrams
 
@@ -35,9 +40,15 @@ The **System-to-be** is the term used to describe the vision and design of a new
 
 ##### Level 1
 
+![Logical View level 1](./Documentation/Images/LogicalView/LV_1.png "Logical View level 1")
+
 ##### Level 2
 
+![Logical View level 2](./Documentation/Images/LogicalView/LV_2.png "Logical View level 2")
+
 ##### Level 3
+
+![Logical View level 3](./Documentation/Images/LogicalView/LV_3.png "Logical View level 3")
 
 #### Process View
 
